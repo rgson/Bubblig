@@ -10,6 +10,8 @@ import se.rgson.da401a.bubblig.R;
 
 public class MainActivity extends Activity {
 
+	private static String TAG = MainActivity.class.getSimpleName();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
