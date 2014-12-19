@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collections;
 
 /**
  * A static helper class for handling Bubb.la RSS requests.
@@ -58,7 +59,7 @@ public class Bubbla {
 					inputStream.close();
 				}
 
-				listener.onSuccess(rss.getChannel().getArticles());
+				listener.onSuccess(Collections.unmodifiableList(rss.getChannel().getArticles()));
 
 			} catch (Exception e) {
 				if (e.getMessage() != null) {
