@@ -65,7 +65,6 @@ public class Readability {
 			} catch (Exception e) {
 				if (e.getMessage() != null) {
 					Log.e(TAG, e.getMessage() + " (" + articleUrl + ")");
-					e.printStackTrace();
 				} else {
 					Log.e(TAG, e.toString());
 				}
