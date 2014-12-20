@@ -1,4 +1,4 @@
-package se.rgson.da401a.bubblig.readability;
+package se.rgson.da401a.bubblig.model.readability;
 
 /**
  * Interface used for parsing callbacks.

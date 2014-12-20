@@ -1,4 +1,4 @@
-package se.rgson.da401a.bubblig.bubbla;
+package se.rgson.da401a.bubblig.model.bubbla;
 
 /**
  * Enum representing the available RSS feeds.
@@ -34,4 +34,8 @@ public enum BubblaFeed {
 		return url;
 	}
 
+	@Override
+	public String toString() {
+		return name().substring(0, 1) + name().substring(1).toLowerCase();
+	}
 }

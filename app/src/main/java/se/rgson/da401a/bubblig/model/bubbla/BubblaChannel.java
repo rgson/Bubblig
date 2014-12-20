@@ -1,4 +1,4 @@
-package se.rgson.da401a.bubblig.bubbla;
+package se.rgson.da401a.bubblig.model.bubbla;
 
 
 import org.simpleframework.xml.ElementList;
