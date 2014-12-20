@@ -1,4 +1,4 @@
-package se.rgson.da401a.bubblig.readability;
+package se.rgson.da401a.bubblig.model.readability;
 
 import android.text.Html;
 import android.text.Spanned;

@@ -1,4 +1,4 @@
-package se.rgson.da401a.bubblig.bubbla;
+package se.rgson.da401a.bubblig.model.bubbla;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
  * Class representing an article from the Bubb.la RSS feed.
  */
 @Root(name = "item", strict = false)
-public class BubblaArticle {
+public class BubblaArticle implements Comparable<BubblaArticle> {
 
 	@Element(name = "guid")
 	private int id;
@@ -15,7 +15,7 @@ public class BubblaArticle {
 	@Element(name = "title")
 	private String title;
 
-	//@Element(name = "link")
+	@Element(name = "link")
 	private String url;
 
 	public int getID() {
@@ -30,4 +30,8 @@ public class BubblaArticle {
 		return url;
 	}
 
+	@Override
+	public int compareTo(BubblaArticle another) {
+		return id - another.id;
+	}
 }
