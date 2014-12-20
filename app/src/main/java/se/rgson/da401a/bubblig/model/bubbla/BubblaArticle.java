@@ -15,7 +15,7 @@ public class BubblaArticle implements Comparable<BubblaArticle> {
 	@Element(name = "title")
 	private String title;
 
-	//@Element(name = "link")
+	@Element(name = "link")
 	private String url;
 
 	public int getID() {
