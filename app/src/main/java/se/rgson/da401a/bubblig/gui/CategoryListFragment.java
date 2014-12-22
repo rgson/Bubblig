@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import se.rgson.da401a.bubblig.R;
+import se.rgson.da401a.bubblig.gui.components.CategoryListAdapter;
 import se.rgson.da401a.bubblig.model.bubbla.BubblaFeed;
 
 public class CategoryListFragment extends Fragment {
@@ -30,7 +31,7 @@ public class CategoryListFragment extends Fragment {
 		View root = inflater.inflate(R.layout.fragment_category_list, container, false);
 
 		mCategoryList = (ListView) root.findViewById(R.id.category_list);
-		mCategoryList.setAdapter(new ArrayAdapter<BubblaFeed>(getActivity(), android.R.layout.simple_list_item_1, BubblaFeed.values()));
+		mCategoryList.setAdapter(new CategoryListAdapter(getActivity()));
 
 		if (savedInstanceState != null) {
 			mCategoryList.setSelection(savedInstanceState.getInt(BUNDLE_SELECTED));

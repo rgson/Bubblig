@@ -3,11 +3,13 @@ package se.rgson.da401a.bubblig.model;
 import android.text.Spanned;
 import android.util.Log;
 
+import java.io.Serializable;
+
 import se.rgson.da401a.bubblig.model.readability.Readability;
 import se.rgson.da401a.bubblig.model.readability.ReadabilityListener;
 import se.rgson.da401a.bubblig.model.readability.ReadabilityResponse;
 
-public class Article implements Comparable<Article> {
+public class Article implements Comparable<Article>, Serializable {
 
 	private static final String TAG = Article.class.getSimpleName();
 
@@ -54,13 +56,13 @@ public class Article implements Comparable<Article> {
 			throw new IllegalArgumentException("Argument must not be null.");
 		}
 		if (mContent != null) {
-			articleListener.onArticleLoaded(Article.this);
+			articleListener.onArticleLoaded(mContent);
 		} else {
 			Readability.parse(getURL(), new ReadabilityListener() {
 				@Override
 				public void onSuccess(ReadabilityResponse response) {
 					mContent = response.getParsedHtml();
-					articleListener.onArticleLoaded(Article.this);
+					articleListener.onArticleLoaded(mContent);
 				}
 
 				@Override

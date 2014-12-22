@@ -1,26 +1,28 @@
 package se.rgson.da401a.bubblig.gui;
 
 import android.app.Activity;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import se.rgson.da401a.bubblig.R;
+import se.rgson.da401a.bubblig.gui.components.ArticleListAdapter;
+import se.rgson.da401a.bubblig.model.Category;
 import se.rgson.da401a.bubblig.model.readability.ReadabilityResponse;
 
 public class ArticleListFragment extends Fragment {
 
 	private static final String TAG = ArticleListFragment.class.getSimpleName();
 	private static final String BUNDLE_SELECTED = "BUNDLE_SELECTED";
+	private static final String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
 
 	private ArticleListFragmentListener mListener;
 	private ListView mArticleList;
+	private ArticleListAdapter mArticleAdapter;
 
 	public static ArticleListFragment newInstance() {
 		return new ArticleListFragment();
@@ -36,10 +38,11 @@ public class ArticleListFragment extends Fragment {
 		View root = inflater.inflate(R.layout.fragment_article_list, container, false);
 
 		mArticleList = (ListView) root.findViewById(R.id.article_list);
-		mArticleList.setAdapter(new ArrayAdapter<ReadabilityResponse>(getActivity(), android.R.layout.simple_list_item_1));
-		// TODO load article list from instance state
+		mArticleAdapter = new ArticleListAdapter(getActivity());
+		mArticleList.setAdapter(mArticleAdapter);
 
 		if (savedInstanceState != null) {
+			mArticleAdapter.setCategory((Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY));
 			mArticleList.setSelection(savedInstanceState.getInt(BUNDLE_SELECTED));
 		}
 
@@ -54,6 +57,13 @@ public class ArticleListFragment extends Fragment {
 		});
 
 		return root;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(BUNDLE_SELECTED, mArticleList.getSelectedItemPosition());
+		outState.putSerializable(BUNDLE_CATEGORY, mArticleAdapter.getCategory());
 	}
 
 	@Override
