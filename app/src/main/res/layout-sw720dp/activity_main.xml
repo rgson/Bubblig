@@ -5,10 +5,21 @@
 	android:layout_height="match_parent"
 	tools:context=".MainActivity">
 
-	<FrameLayout
-		android:id="@+id/container"
+	<RelativeLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
+		android:layout_height="match_parent">
+
+		<FrameLayout
+			android:id="@+id/list_container"
+			android:layout_width="0"
+			android:layout_height="match_parent"/>
+
+		<FrameLayout
+			android:id="@+id/article_container"
+			android:layout_width="0"
+			android:layout_height="match_parent"/>
+
+	</RelativeLayout>
 
 	<FrameLayout
 		android:id="@+id/drawer_container"
