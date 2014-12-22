@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
  * Class representing an article from the Bubb.la RSS feed.
  */
 @Root(name = "item", strict = false)
-public class BubblaArticle implements Comparable<BubblaArticle> {
+public class BubblaArticle {
 
 	@Element(name = "guid")
 	private int id;
@@ -30,8 +30,4 @@ public class BubblaArticle implements Comparable<BubblaArticle> {
 		return url;
 	}
 
-	@Override
-	public int compareTo(BubblaArticle another) {
-		return id - another.id;
-	}
 }

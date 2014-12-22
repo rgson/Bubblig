@@ -4,8 +4,8 @@ import java.util.List;
 
 import se.rgson.da401a.bubblig.model.bubbla.BubblaArticle;
 
-public interface ModelCategoryListener {
+public interface CategoryListener {
 
-	void onCategoryLoaded(List<BubblaArticle> articles);
+	void onCategoryLoaded(List<Article> articles);
 
 }
