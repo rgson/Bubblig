@@ -25,5 +25,6 @@ android {
 
 dependencies {
 	compile fileTree(include: ['*.jar'], dir: 'libs')
+	compile 'com.android.support:support-v4:+'
 	compile files('libs/simple-xml-2.7.1.jar')
 }

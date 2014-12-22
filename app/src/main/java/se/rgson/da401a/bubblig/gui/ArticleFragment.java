@@ -73,6 +73,7 @@ public class ArticleFragment extends Fragment {
 				mArticleContent.setText(content);
 			}
 		});
+		updateMenuActions();
 	}
 
 	public Article getArticle() {

@@ -7,12 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.components.CategoryListAdapter;
-import se.rgson.da401a.bubblig.model.bubbla.BubblaFeed;
+import se.rgson.da401a.bubblig.model.Category;
 
 public class CategoryListFragment extends Fragment {
 
@@ -42,7 +41,7 @@ public class CategoryListFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				view.setSelected(true);
 				if (mListener != null) {
-					mListener.onCategorySelected((BubblaFeed) mCategoryList.getSelectedItem());
+					mListener.onCategorySelected((Category) mCategoryList.getSelectedItem());
 				}
 			}
 		});
@@ -74,7 +73,7 @@ public class CategoryListFragment extends Fragment {
 	}
 
 	public interface CategoryListFragmentListener {
-		public void onCategorySelected(BubblaFeed category);
+		public void onCategorySelected(Category category);
 	}
 
 }

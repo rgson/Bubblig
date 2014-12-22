@@ -6,9 +6,11 @@ import android.os.Bundle;
 import se.rgson.da401a.bubblig.gui.ArticleFragment;
 import se.rgson.da401a.bubblig.gui.ArticleListFragment;
 import se.rgson.da401a.bubblig.gui.CategoryListFragment;
+import se.rgson.da401a.bubblig.model.Article;
+import se.rgson.da401a.bubblig.model.Category;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener {
 
 	private static String TAG = MainActivity.class.getSimpleName();
 
@@ -27,6 +29,7 @@ public class MainActivity extends Activity {
 				getFragmentManager().beginTransaction()
 						.add(R.id.drawer_container, CategoryListFragment.newInstance())
 						.add(R.id.container, ArticleListFragment.newInstance())
+						//.add(R.id.container, ArticleFragment.newInstance())
 						.commit();
 			} else {
 				getFragmentManager().beginTransaction()
@@ -40,4 +43,13 @@ public class MainActivity extends Activity {
 
 	}
 
+	@Override
+	public void onArticleSelected(Article article) {
+		//TODO implement
+	}
+
+	@Override
+	public void onCategorySelected(Category category) {
+		//TODO implement
+	}
 }

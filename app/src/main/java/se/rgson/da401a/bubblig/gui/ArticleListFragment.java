@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.components.ArticleListAdapter;
+import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
 import se.rgson.da401a.bubblig.model.readability.ReadabilityResponse;
 
@@ -51,7 +52,7 @@ public class ArticleListFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				mArticleList.setSelected(true);
 				if (mListener != null) {
-					mListener.onArticleSelected((ReadabilityResponse) mArticleList.getSelectedItem());
+					mListener.onArticleSelected((Article) mArticleList.getSelectedItem());
 				}
 			}
 		});
@@ -85,7 +86,7 @@ public class ArticleListFragment extends Fragment {
 
 	public interface ArticleListFragmentListener {
 
-		public void onArticleSelected(ReadabilityResponse article);
+		public void onArticleSelected(Article article);
 
 	}
 
