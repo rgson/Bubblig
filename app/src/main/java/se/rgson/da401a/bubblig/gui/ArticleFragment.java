@@ -1,6 +1,8 @@
 package se.rgson.da401a.bubblig.gui;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import se.rgson.da401a.bubblig.R;
@@ -22,6 +25,8 @@ public class ArticleFragment extends Fragment {
 
 	private Article mArticle;
 	private TextView mArticleContent;
+	private ShareActionProvider mShareAction;
+	private ShareActionProvider mOpenAction;
 
 	public static ArticleFragment newInstance() {
 		return new ArticleFragment();
@@ -50,20 +55,8 @@ public class ArticleFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.menu_article, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
-			case R.id.action_article_open:
-				actionOpen();
-				return true;
-			case R.id.action_article_share:
-				actionShare();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
-		}
+		mShareAction = (ShareActionProvider) menu.findItem(R.id.action_article_share).getActionProvider();
+		mOpenAction = (ShareActionProvider) menu.findItem(R.id.action_article_open).getActionProvider();
 	}
 
 	@Override
@@ -86,11 +79,16 @@ public class ArticleFragment extends Fragment {
 		return mArticle;
 	}
 
-	private void actionOpen() {
-		//TODO Add open action
-	}
-
-	private void actionShare() {
-		//TODO Add share action
+	private void updateMenuActions() {
+		if (mShareAction != null) {
+			mShareAction.setShareIntent(new Intent(Intent.ACTION_SEND)
+					.setType("text/plain")
+					.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.share))
+					.putExtra(Intent.EXTRA_TEXT, mArticle.getURL()));
+		}
+		if (mOpenAction != null) {
+			mOpenAction.setShareIntent(new Intent(Intent.ACTION_VIEW)
+					.setData(Uri.parse(mArticle.getURL())));
+		}
 	}
 }
