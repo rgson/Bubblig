@@ -4,6 +4,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,6 +28,12 @@ public class ArticleFragment extends Fragment {
 	}
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.fragment_article, container, false);
 
@@ -35,6 +44,26 @@ public class ArticleFragment extends Fragment {
 		}
 
 		return root;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.menu_article, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+			case R.id.action_article_open:
+				actionOpen();
+				return true;
+			case R.id.action_article_share:
+				actionShare();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 	@Override
@@ -55,5 +84,13 @@ public class ArticleFragment extends Fragment {
 
 	public Article getArticle() {
 		return mArticle;
+	}
+
+	private void actionOpen() {
+		//TODO Add open action
+	}
+
+	private void actionShare() {
+		//TODO Add share action
 	}
 }

@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/action_article_share"
+		android:title="@string/share"
+		android:orderInCategory="100"
+		android:showAsAction="never"/>
+
+	<item
+		android:id="@+id/action_article_open"
+		android:title="@string/open"
+		android:orderInCategory="100"
+		android:showAsAction="never"/>
+
+</menu>
