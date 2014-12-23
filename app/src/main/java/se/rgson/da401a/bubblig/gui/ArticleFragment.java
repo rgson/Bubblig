@@ -61,8 +61,10 @@ public class ArticleFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_article_open:
-				startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(mArticle.getURL())));
-				return true;
+				if (mArticle != null) {
+					startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(mArticle.getURL())));
+					return true;
+				}
 			default:
 				return super.onOptionsItemSelected(item);
 		}
