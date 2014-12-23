@@ -12,6 +12,6 @@
 		android:title="@string/open"
 		android:orderInCategory="2"
 		android:showAsAction="ifRoom"
-		android:actionProviderClass="android.widget.ShareActionProvider"/>
+		android:icon="@drawable/ic_action_web_site"/>
 
 </menu>

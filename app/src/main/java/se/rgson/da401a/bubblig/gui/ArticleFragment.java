@@ -26,7 +26,6 @@ public class ArticleFragment extends Fragment {
 	private Article mArticle;
 	private TextView mArticleContent;
 	private ShareActionProvider mShareAction;
-	private ShareActionProvider mOpenAction;
 
 	public static ArticleFragment newInstance() {
 		return new ArticleFragment();
@@ -56,7 +55,17 @@ public class ArticleFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.menu_article, menu);
 		mShareAction = (ShareActionProvider) menu.findItem(R.id.action_article_share).getActionProvider();
-		mOpenAction = (ShareActionProvider) menu.findItem(R.id.action_article_open).getActionProvider();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.action_article_open:
+				startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(mArticle.getURL())));
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 	@Override
@@ -86,10 +95,6 @@ public class ArticleFragment extends Fragment {
 					.setType("text/plain")
 					.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.share))
 					.putExtra(Intent.EXTRA_TEXT, mArticle.getURL()));
-		}
-		if (mOpenAction != null) {
-			mOpenAction.setShareIntent(new Intent(Intent.ACTION_VIEW)
-					.setData(Uri.parse(mArticle.getURL())));
 		}
 	}
 }
