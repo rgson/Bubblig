@@ -28,6 +28,9 @@ public class Readability {
 	 * @param listener   The ReadabilityListener containing the callback methods.
 	 */
 	public static void parse(String articleUrl, ReadabilityListener listener) {
+		if (articleUrl == null || listener == null) {
+			throw new IllegalArgumentException("Arguments must not be null.");
+		}
 		new AsyncParser().execute(articleUrl, listener);
 	}
 
@@ -40,11 +43,13 @@ public class Readability {
 	/**
 	 * Performs the parsing as an AsyncTask.
 	 */
-	private static class AsyncParser extends AsyncTask<Object, Void, Void> {
+	private static class AsyncParser extends AsyncTask<Object, Void, ReadabilityResponse> {
+		private ReadabilityListener listener;
+
 		@Override
-		protected Void doInBackground(Object... params) {
+		protected ReadabilityResponse doInBackground(Object... params) {
 			String articleUrl = (String) params[0];
-			ReadabilityListener listener = (ReadabilityListener) params[1];
+			listener = (ReadabilityListener) params[1];
 
 			try {
 				ReadabilityResponse response = null;
@@ -60,7 +65,7 @@ public class Readability {
 					inputStream.close();
 				}
 
-				listener.onSuccess(response);
+				return response;
 
 			} catch (Exception e) {
 				if (e.getMessage() != null) {
@@ -72,6 +77,12 @@ public class Readability {
 			}
 
 			return null;
+		}
+
+		@Override
+		protected void onPostExecute(ReadabilityResponse result) {
+			super.onPostExecute(result);
+			listener.onSuccess(result);
 		}
 	}
 

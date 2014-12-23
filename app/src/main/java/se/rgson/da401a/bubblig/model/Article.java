@@ -43,6 +43,11 @@ public class Article implements Comparable<Article>, Serializable {
 	}
 
 	@Override
+	public String toString() {
+		return mTitle;
+	}
+
+	@Override
 	public int compareTo(Article another) {
 		return mID - another.mID;
 	}
@@ -93,5 +98,4 @@ public class Article implements Comparable<Article>, Serializable {
 			});
 		}
 	}
-
 }

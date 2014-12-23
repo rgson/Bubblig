@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * A static helper class for handling Bubb.la RSS requests.
@@ -33,17 +34,22 @@ public class Bubbla {
 	 * @param listener The BubblaListener containing the callback methods.
 	 */
 	public static void read(BubblaFeed feed, BubblaListener listener) {
+		if (feed == null || listener == null) {
+			throw new IllegalArgumentException("Arguments must not be null.");
+		}
 		new AsyncReader().execute(feed, listener);
 	}
 
 	/**
 	 * Performs the reading as an AsyncTask.
 	 */
-	private static class AsyncReader extends AsyncTask<Object, Void, Void> {
+	private static class AsyncReader extends AsyncTask<Object, Void, List<BubblaArticle>> {
+		private BubblaListener listener;
+
 		@Override
-		protected Void doInBackground(Object... params) {
+		protected List<BubblaArticle> doInBackground(Object... params) {
 			BubblaFeed feed = (BubblaFeed) params[0];
-			BubblaListener listener = (BubblaListener) params[1];
+			listener = (BubblaListener) params[1];
 
 			try {
 				BubblaRSS rss = null;
@@ -59,7 +65,7 @@ public class Bubbla {
 					inputStream.close();
 				}
 
-				listener.onSuccess(Collections.unmodifiableList(rss.getChannel().getArticles()));
+				return rss.getChannel().getArticles();
 
 			} catch (Exception e) {
 				if (e.getMessage() != null) {
@@ -71,6 +77,12 @@ public class Bubbla {
 			}
 
 			return null;
+		}
+
+		@Override
+		protected void onPostExecute(List<BubblaArticle> result) {
+			super.onPostExecute(result);
+			listener.onSuccess(Collections.unmodifiableList(result));
 		}
 	}
 

@@ -3,6 +3,7 @@ package se.rgson.da401a.bubblig.gui;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class ArticleListFragment extends Fragment {
 		View root = inflater.inflate(R.layout.fragment_article_list, container, false);
 
 		mArticleList = (ListView) root.findViewById(R.id.article_list);
-		mArticleAdapter = new ArticleListAdapter(getActivity());
+		mArticleAdapter = new ArticleListAdapter(getActivity(), Category.NYHETER);
 		mArticleList.setAdapter(mArticleAdapter);
 
 		if (savedInstanceState != null) {
