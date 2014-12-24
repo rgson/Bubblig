@@ -29,7 +29,6 @@ public class MainActivity extends Activity implements CategoryListFragment.Categ
 				getFragmentManager().beginTransaction()
 						.add(R.id.drawer_container, CategoryListFragment.newInstance())
 						.add(R.id.container, ArticleListFragment.newInstance())
-						//.add(R.id.container, ArticleFragment.newInstance())
 						.commit();
 			} else {
 				getFragmentManager().beginTransaction()
