@@ -3,6 +3,7 @@ package se.rgson.da401a.bubblig.gui;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class ArticleListFragment extends Fragment {
 	private ArticleListFragmentListener mListener;
 	private ListView mArticleList;
 	private ArticleListAdapter mArticleAdapter;
+	private SwipeRefreshLayout mArticleRefreshLayout;
 
 	public static ArticleListFragment newInstance() {
 		return new ArticleListFragment();
@@ -42,6 +44,8 @@ public class ArticleListFragment extends Fragment {
 		mArticleList = (ListView) root.findViewById(R.id.article_list);
 		mArticleAdapter = new ArticleListAdapter(getActivity(), Category.NYHETER);
 		mArticleList.setAdapter(mArticleAdapter);
+		mArticleRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.article_swipe_refresh_layout);
+		mArticleAdapter.setSwipeRefreshLayout(mArticleRefreshLayout);
 
 		if (savedInstanceState != null) {
 			mArticleAdapter.setCategory((Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY));
