@@ -87,10 +87,6 @@ public class ArticleFragment extends Fragment {
 		updateMenuActions();
 	}
 
-	public Article getArticle() {
-		return mArticle;
-	}
-
 	private void updateMenuActions() {
 		if (mShareAction != null) {
 			mShareAction.setShareIntent(new Intent(Intent.ACTION_SEND)
