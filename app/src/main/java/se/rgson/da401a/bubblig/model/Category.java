@@ -34,6 +34,9 @@ public enum Category {
 
 	@Override
 	public String toString() {
+		if (this == USA) {
+			return name();
+		}
 		return name().substring(0, 1) + name().substring(1).toLowerCase();
 	}
 
