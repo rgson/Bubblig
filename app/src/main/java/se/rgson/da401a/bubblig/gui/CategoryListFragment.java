@@ -3,6 +3,7 @@ package se.rgson.da401a.bubblig.gui;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,7 @@ public class CategoryListFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				view.setSelected(true);
 				if (mListener != null) {
-					mListener.onCategorySelected((Category) mCategoryList.getSelectedItem());
+					mListener.onCategorySelected((Category) mCategoryList.getItemAtPosition(position));
 				}
 			}
 		});

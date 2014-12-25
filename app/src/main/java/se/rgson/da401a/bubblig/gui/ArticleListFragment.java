@@ -57,7 +57,7 @@ public class ArticleListFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				mArticleList.setSelected(true);
 				if (mListener != null) {
-					mListener.onArticleSelected((Article) mArticleList.getSelectedItem());
+					mListener.onArticleSelected((Article) mArticleList.getItemAtPosition(position));
 				}
 			}
 		});
@@ -87,6 +87,10 @@ public class ArticleListFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	public void setCategory(Category category) {
+		mArticleAdapter.setCategory(category);
 	}
 
 	public interface ArticleListFragmentListener {
