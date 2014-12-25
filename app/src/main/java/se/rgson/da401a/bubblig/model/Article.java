@@ -1,5 +1,6 @@
 package se.rgson.da401a.bubblig.model;
 
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
 
@@ -54,6 +55,7 @@ public class Article implements Comparable<Article>, Serializable {
 
 	/**
 	 * Gets the content of the article.
+	 *
 	 * @param articleListener
 	 */
 	public void getContent(final ArticleListener articleListener) {
@@ -71,7 +73,7 @@ public class Article implements Comparable<Article>, Serializable {
 				}
 
 				@Override
-				public void onError(Exception e) {
+				public void onError() {
 					Log.e(TAG, "Failed to fetch content for article " + mID);
 				}
 			});
@@ -92,8 +94,9 @@ public class Article implements Comparable<Article>, Serializable {
 				}
 
 				@Override
-				public void onError(Exception e) {
+				public void onError() {
 					Log.e(TAG, "Failed to fetch content for article " + mID);
+					mContent = new SpannableString("Failed to fetch content for article. Please visit the original source.");
 				}
 			});
 		}

@@ -16,8 +16,6 @@ public interface BubblaListener {
 
 	/**
 	 * Called upon failure when parsing an RSS feed.
-	 *
-	 * @param e The exception that occurred during parsing.
 	 */
-	void onError(Exception e);
+	void onError();
 }

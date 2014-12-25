@@ -13,8 +13,6 @@ public interface ReadabilityListener {
 
 	/**
 	 * Called upon failure when parsing an article.
-	 *
-	 * @param e The exception that occurred during parsing.
 	 */
-	void onError(Exception e);
+	void onError();
 }

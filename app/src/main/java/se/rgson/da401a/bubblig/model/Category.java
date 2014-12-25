@@ -70,7 +70,7 @@ public enum Category {
 				}
 
 				@Override
-				public void onError(Exception e) {
+				public void onError() {
 					Log.e(TAG, "Failed to fetch articles for " + name());
 				}
 			});

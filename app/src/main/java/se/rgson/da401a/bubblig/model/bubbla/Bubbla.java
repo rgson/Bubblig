@@ -73,7 +73,6 @@ public class Bubbla {
 				} else {
 					Log.e(TAG, e.toString());
 				}
-				listener.onError(e);
 			}
 
 			return null;
@@ -82,7 +81,11 @@ public class Bubbla {
 		@Override
 		protected void onPostExecute(List<BubblaArticle> result) {
 			super.onPostExecute(result);
-			listener.onSuccess(Collections.unmodifiableList(result));
+			if (result != null) {
+				listener.onSuccess(Collections.unmodifiableList(result));
+			} else {
+				listener.onError();
+			}
 		}
 	}
 

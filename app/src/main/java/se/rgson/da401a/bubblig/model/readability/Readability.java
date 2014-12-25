@@ -73,7 +73,6 @@ public class Readability {
 				} else {
 					Log.e(TAG, e.toString());
 				}
-				listener.onError(e);
 			}
 
 			return null;
@@ -82,7 +81,11 @@ public class Readability {
 		@Override
 		protected void onPostExecute(ReadabilityResponse result) {
 			super.onPostExecute(result);
-			listener.onSuccess(result);
+			if (result != null) {
+				listener.onSuccess(result);
+			} else {
+				listener.onError();
+			}
 		}
 	}
 
