@@ -4,5 +4,7 @@
     <string name="app_name">Bubblig</string>
 	<string name="share">Share</string>
 	<string name="open">Open</string>
+	<string name="drawer_open">Open drawer</string>
+	<string name="drawer_close">Close drawer</string>
 
 </resources>
