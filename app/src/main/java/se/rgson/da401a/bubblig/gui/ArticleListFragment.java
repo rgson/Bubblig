@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,8 @@ import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.components.ArticleListAdapter;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
-import se.rgson.da401a.bubblig.model.readability.ReadabilityResponse;
 
-public class ArticleListFragment extends Fragment {
+public class ArticleListFragment extends Fragment implements ArticleListAdapter.ArticleListAdapterListener {
 
 	private static final String TAG = ArticleListFragment.class.getSimpleName();
 	private static final String BUNDLE_SELECTED = "BUNDLE_SELECTED";
@@ -26,38 +24,49 @@ public class ArticleListFragment extends Fragment {
 	private ArticleListFragmentListener mListener;
 	private ListView mArticleList;
 	private ArticleListAdapter mArticleAdapter;
-	private SwipeRefreshLayout mArticleRefreshLayout;
+	private SwipeRefreshLayout mSwipeRefreshLayout;
+	private Category mCategory;
 
-	public static ArticleListFragment newInstance() {
-		return new ArticleListFragment();
+	public static ArticleListFragment newInstance(Category category) {
+		ArticleListFragment fragment = new ArticleListFragment();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(BUNDLE_CATEGORY, category);
+		fragment.setArguments(bundle);
+		return fragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null) {
+			mCategory = (Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY);
+		}
+		else if (getArguments() != null) {
+			mCategory = (Category) getArguments().getSerializable(BUNDLE_CATEGORY);
+		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.fragment_article_list, container, false);
 
 		mArticleList = (ListView) root.findViewById(R.id.article_list);
-		mArticleAdapter = new ArticleListAdapter(getActivity(), Category.NYHETER);
-		mArticleList.setAdapter(mArticleAdapter);
-		mArticleRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.article_swipe_refresh_layout);
-		mArticleAdapter.setSwipeRefreshLayout(mArticleRefreshLayout);
+		mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.article_swipe_refresh_layout);
 
-		if (savedInstanceState != null) {
-			mArticleAdapter.setCategory((Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY));
-			mArticleList.setSelection(savedInstanceState.getInt(BUNDLE_SELECTED));
+		if (mCategory != null) {
+			mArticleAdapter = new ArticleListAdapter(getActivity(), mCategory, this);
+			mArticleList.setAdapter(mArticleAdapter);
+			if (savedInstanceState != null) {
+				mArticleList.setSelection(savedInstanceState.getInt(BUNDLE_SELECTED));
+			}
 		}
 
 		mArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				mArticleList.setSelected(true);
+				view.setSelected(true);
 				if (mListener != null) {
-					mListener.onArticleSelected((Article) mArticleList.getItemAtPosition(position));
+					mListener.onArticleSelected(mArticleAdapter.getItem(position));
 				}
 			}
 		});
@@ -68,8 +77,8 @@ public class ArticleListFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
 		outState.putInt(BUNDLE_SELECTED, mArticleList.getSelectedItemPosition());
-		outState.putSerializable(BUNDLE_CATEGORY, mArticleAdapter.getCategory());
 	}
 
 	@Override
@@ -89,14 +98,13 @@ public class ArticleListFragment extends Fragment {
 		mListener = null;
 	}
 
-	public void setCategory(Category category) {
-		mArticleAdapter.setCategory(category);
+	@Override
+	public void isRefreshing(boolean refreshing) {
+		mSwipeRefreshLayout.setRefreshing(refreshing);
 	}
 
 	public interface ArticleListFragmentListener {
-
 		public void onArticleSelected(Article article);
-
 	}
 
 }

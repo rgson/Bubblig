@@ -27,14 +27,24 @@ public class ArticleFragment extends Fragment {
 	private TextView mArticleContent;
 	private ShareActionProvider mShareAction;
 
-	public static ArticleFragment newInstance() {
-		return new ArticleFragment();
+	public static ArticleFragment newInstance(Article article) {
+		ArticleFragment fragment = new ArticleFragment();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(BUNDLE_ARTICLE, article);
+		fragment.setArguments(bundle);
+		return fragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		if (savedInstanceState != null) {
+			mArticle = (Article) savedInstanceState.getSerializable(BUNDLE_ARTICLE);
+		}
+		else if (getArguments() != null) {
+			mArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
+		}
 	}
 
 	@Override
@@ -43,8 +53,20 @@ public class ArticleFragment extends Fragment {
 
 		mArticleContent = (TextView) root.findViewById(R.id.article_content);
 
-		if (savedInstanceState != null) {
-			setArticle((Article) savedInstanceState.getSerializable(BUNDLE_ARTICLE));
+		if (mArticle != null) {
+			mArticle.getContent(new ArticleListener() {
+				@Override
+				public void onArticleLoaded(Spanned content) {
+					mArticleContent.setText(content);
+				}
+			});
+
+			if (mShareAction != null) {
+				mShareAction.setShareIntent(new Intent(Intent.ACTION_SEND)
+						.setType("text/plain")
+						.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.share))
+						.putExtra(Intent.EXTRA_TEXT, mArticle.getURL()));
+			}
 		}
 
 		return root;
@@ -76,23 +98,4 @@ public class ArticleFragment extends Fragment {
 		outState.putSerializable(BUNDLE_ARTICLE, mArticle);
 	}
 
-	public void setArticle(Article article) {
-		mArticle = article;
-		mArticle.getContent(new ArticleListener() {
-			@Override
-			public void onArticleLoaded(Spanned content) {
-				mArticleContent.setText(content);
-			}
-		});
-		updateMenuActions();
-	}
-
-	private void updateMenuActions() {
-		if (mShareAction != null) {
-			mShareAction.setShareIntent(new Intent(Intent.ACTION_SEND)
-					.setType("text/plain")
-					.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.share))
-					.putExtra(Intent.EXTRA_TEXT, mArticle.getURL()));
-		}
-	}
 }

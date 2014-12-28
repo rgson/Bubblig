@@ -2,10 +2,9 @@ package se.rgson.da401a.bubblig.gui.components;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
@@ -16,54 +15,36 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 	private static final String TAG = ArticleListAdapter.class.getSimpleName();
 
 	private Category mCategory;
-	private SwipeRefreshLayout mSwipeRefreshLayout;
+	private ArticleListAdapterListener mListener;
 
-	public ArticleListAdapter(Context context, Category category) {
+	public ArticleListAdapter(Context context, Category category, ArticleListAdapterListener listener) {
 		super(context, android.R.layout.simple_list_item_1);
-		setCategory(category);
-	}
-
-	public Category getCategory() {
-		return mCategory;
-	}
-
-	public void setCategory(Category category) {
 		if (category == null) {
 			throw new IllegalArgumentException("Category must not be null.");
 		}
 		mCategory = category;
+		mListener = listener;
 		refresh();
 	}
 
-	public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
-		if (mSwipeRefreshLayout != null) {
-			mSwipeRefreshLayout.setOnRefreshListener(null);
-		}
-		mSwipeRefreshLayout = swipeRefreshLayout;
-		if (mSwipeRefreshLayout != null) {
-			mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-				@Override
-				public void onRefresh() {
-					refresh();
-				}
-			});
-		}
-	}
-
 	public void refresh() {
-		if (mSwipeRefreshLayout != null) {
-			mSwipeRefreshLayout.setRefreshing(true);
+		if (mListener != null) {
+			mListener.isRefreshing(true);
 		}
 		mCategory.getArticles(new CategoryListener() {
 			@Override
-			public void onCategoryLoaded(List<Article> articles) {
+			public void onCategoryLoaded(ArrayList<Article> articles) {
 				ArticleListAdapter.this.clear();
 				ArticleListAdapter.this.addAll(articles);
-				if (mSwipeRefreshLayout != null) {
-					mSwipeRefreshLayout.setRefreshing(false);
+				if (mListener != null) {
+					mListener.isRefreshing(false);
 				}
 			}
 		});
+	}
+
+	public interface ArticleListAdapterListener {
+		void isRefreshing(boolean refreshing);
 	}
 
 }

@@ -30,7 +30,7 @@ public enum Category {
 
 	private static final int PREFETCH_COUNT = 10;
 
-	private List<Article> mArticles;
+	private ArrayList<Article> mArticles;
 
 	@Override
 	public String toString() {
