@@ -8,10 +8,16 @@
 
 	<ImageView
 		android:id="@+id/listrow_category_color"
-		style="@style/imageView_cat"/>
+		android:layout_width="@dimen/listrow_category_image_size"
+		android:layout_height="@dimen/listrow_category_image_size"
+		android:layout_gravity="center_vertical"
+		style="@style/ImageView.Category"/>
 
 	<TextView
 		android:id="@+id/listrow_category_text"
-		style="@style/txtView_cat"/>
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/listrow_category_margin"
+		style="@style/TextView.Category"/>
 
 </LinearLayout>

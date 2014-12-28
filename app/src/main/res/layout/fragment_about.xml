@@ -1,20 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="se.rgson.da401a.bubblig.gui.components.AboutFragment"
-    android:id="@+id/container_about" >
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context="se.rgson.da401a.bubblig.gui.components.AboutFragment"
+	android:id="@+id/container_about">
 
-    <TextView
-        android:id="@+id/aboutList"
-        android:text="@string/about_app"
-        style="@style/txtView" />
+	<TextView
+		android:id="@+id/aboutList"
+		android:text="@string/about_app"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:layout_margin="@dimen/textview_margin"/>
 
 
-    <Button
-        style="@style/btn"
-        android:text="@string/btn_about_back"
-        android:id="@+id/btn_about_back"
-        android:layout_gravity="center_horizontal|bottom" />
+	<Button
+		android:id="@+id/btn_about_back"
+		android:text="@string/btn_about_back"
+		android:layout_gravity="center_horizontal|bottom"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"/>
 
 </FrameLayout>

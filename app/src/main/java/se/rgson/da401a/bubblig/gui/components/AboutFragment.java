@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import se.rgson.da401a.bubblig.R;
-import se.rgson.da401a.bubblig.gui.ArticleFragment;
 import se.rgson.da401a.bubblig.gui.ArticleListFragment;
+import se.rgson.da401a.bubblig.model.Category;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AboutFragment.OnFragmentInteractionListener} interface
+ * {@link se.rgson.da401a.bubblig.gui.components.AboutFragment.AboutFragmentListener} interface
  * to handle interaction events.
  * Use the {@link AboutFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -35,7 +35,7 @@ public class AboutFragment extends Fragment {
 
     private Button btn_about_back;
 
-    private OnFragmentInteractionListener mListener;
+    private AboutFragmentListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -79,7 +79,7 @@ public class AboutFragment extends Fragment {
         btn_about_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArticleListFragment fragment = ArticleListFragment.newInstance();
+                ArticleListFragment fragment = ArticleListFragment.newInstance(Category.NYHETER);
                 FragmentManager fM = getFragmentManager();
                 FragmentTransaction fT = fM.beginTransaction();
                 fT.replace(R.id.container, fragment, null);
@@ -103,7 +103,7 @@ public class AboutFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (AboutFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -126,7 +126,7 @@ public class AboutFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface AboutFragmentListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }

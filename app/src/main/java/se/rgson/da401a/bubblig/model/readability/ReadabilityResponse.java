@@ -1,8 +1,5 @@
 package se.rgson.da401a.bubblig.model.readability;
 
-import android.text.Html;
-import android.text.Spanned;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -24,15 +21,6 @@ public class ReadabilityResponse {
 
 	public String getContent() {
 		return content;
-	}
-
-	/**
-	 * Returns the parsed data as an HTML-formatted Spanned object, for use within a TextView.
-	 *
-	 * @return The title and content, formatted from HTML.
-	 */
-	public Spanned getParsedHtml() {
-		return Html.fromHtml("<h1>" + title + "</h1>" + content);
 	}
 
 }

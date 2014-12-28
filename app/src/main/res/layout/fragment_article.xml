@@ -1,12 +1,23 @@
-<FrameLayout
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	 xmlns:tools="http://schemas.android.com/tools"
-	 android:layout_width="match_parent"
-	 android:layout_height="match_parent"
-	 tools:context="se.rgson.da401a.bubblig.gui.ArticleFragment">
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context="se.rgson.da401a.bubblig.gui.ArticleFragment">
 
-	<TextView
-		android:id="@+id/article_content"
-        style="@style/txtView"/>
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:scrollbars="vertical"
+		android:fillViewport="true">
 
-</FrameLayout>
+		<TextView
+			android:id="@+id/article_content"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_margin="@dimen/activity_horizontal_margin"
+			android:layout_weight="1.0"/>
+
+	</ScrollView>
+
+</LinearLayout>

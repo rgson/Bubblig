@@ -1,47 +1,42 @@
 package se.rgson.da401a.bubblig;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import se.rgson.da401a.bubblig.gui.ArticleFragment;
 import se.rgson.da401a.bubblig.gui.ArticleListFragment;
+import se.rgson.da401a.bubblig.gui.ArticlePagerFragment;
 import se.rgson.da401a.bubblig.gui.CategoryListFragment;
 import se.rgson.da401a.bubblig.gui.components.AboutFragment;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
 
 
-public class MainActivity extends FragmentActivity implements CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener, AboutFragment.OnFragmentInteractionListener {
+public class MainActivity extends Activity implements
+		CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener,
+		ArticlePagerFragment.ArticlePagerFragmentListener, AboutFragment.AboutFragmentListener {
 
 	private static String TAG = MainActivity.class.getSimpleName();
 
-    private Button gotoAbout;
+	private Button gotoAbout;
 
 	private boolean mTabletLayout = false;
 	private float mDrawerOffset = 0.0f;
-	private String mTitle;
+	private Category mCategory;
 
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
-	private CategoryListFragment mCategoryListFragment;
-	private ArticleListFragment mArticleListFragment;
-	private ArticleFragment mArticleFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,32 +51,19 @@ public class MainActivity extends FragmentActivity implements CategoryListFragme
 
 
 		mTabletLayout = (findViewById(R.id.article_container) != null);
-		mTitle = getResources().getString(R.string.app_name);
+		mCategory = Category.NYHETER;
 
 		if (savedInstanceState == null) {
-
-			mCategoryListFragment = CategoryListFragment.newInstance();
-			mArticleListFragment = ArticleListFragment.newInstance();
-			mArticleFragment = ArticleFragment.newInstance();
-
-			if (!mTabletLayout) {
-				getFragmentManager().beginTransaction()
-						.add(R.id.drawer_container, mCategoryListFragment)
-						.add(R.id.container, mArticleListFragment)
-						.commit();
-			} else {
-				getFragmentManager().beginTransaction()
-						.add(R.id.drawer_container, mCategoryListFragment)
-						.add(R.id.list_container, mArticleListFragment)
-						.add(R.id.article_container, mArticleFragment)
-						.commit();
-			}
-
+			int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
+			getFragmentManager().beginTransaction()
+					.add(R.id.drawer_container, CategoryListFragment.newInstance())
+					.add(articleListContainerID, ArticleListFragment.newInstance(mCategory))
+					.commit();
 		}
 
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(mTitle);
+				getActionBar().setTitle(mCategory.toString());
 				invalidateOptionsMenu();
 			}
 
@@ -127,60 +109,61 @@ public class MainActivity extends FragmentActivity implements CategoryListFragme
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_about:
-                    AboutFragment fragment = AboutFragment.newInstance("", "");
-                    FragmentManager fM = getFragmentManager();
-                    FragmentTransaction fT = fM.beginTransaction();
-                    fT.replace(R.id.container, fragment, null);
-                    fT.addToBackStack("about back");
-                    fT.commit();
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
 
-                default: return super.onOptionsItemSelected(item);
-            }
-	}
+		switch (item.getItemId()) {
+			case R.id.action_about:
+				AboutFragment fragment = AboutFragment.newInstance("", "");
+				FragmentManager fM = getFragmentManager();
+				FragmentTransaction fT = fM.beginTransaction();
+				fT.replace(R.id.container, fragment, null);
+				fT.addToBackStack("about back");
+				fT.commit();
 
-	@Override
-	public void setTitle(CharSequence title) {
-		super.setTitle(title);
-		mTitle = (String) title;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 	@Override
 	public void onCategorySelected(Category category) {
-		if (!mTabletLayout) {
-			getFragmentManager().beginTransaction()
-					.replace(R.id.container, mArticleListFragment)
-					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-					.commit();
-		}
-		mArticleListFragment.setCategory(category);
-		setTitle(category.toString());
+		mCategory = category;
+		int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
+		getFragmentManager().beginTransaction()
+				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory))
+				.commit();
+		setTitle(mCategory.toString());
 		mDrawerLayout.closeDrawers();
 	}
 
 	@Override
 	public void onArticleSelected(Article article) {
-		if (!mTabletLayout) {
-			getFragmentManager().beginTransaction()
-					.replace(R.id.container, mArticleFragment)
-					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-					.commit();
-		}
-		mArticleFragment.setArticle(article);
+		int articlePagerContainerID = mTabletLayout ? R.id.article_container : R.id.container;
+		getFragmentManager().beginTransaction()
+				.replace(articlePagerContainerID, ArticlePagerFragment.newInstance(mCategory, article))
+				.commit();
 	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //Inflates the actionbar
-        MenuInflater mif = getMenuInflater();
-        mif.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+	@Override
+	public void onDisplayedArticleChanged(Article article) {
+		if (mTabletLayout) {
+			// Update ListView to match displayed article.
+		}
+	}
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		//Inflates the actionbar
+		MenuInflater mif = getMenuInflater();
+		mif.inflate(R.menu.menu_main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
-    }
+	@Override
+	public void onFragmentInteraction(Uri uri) {
+
+	}
 }

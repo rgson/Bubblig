@@ -1,5 +1,6 @@
 package se.rgson.da401a.bubblig.model;
 
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
@@ -18,7 +19,7 @@ public class Article implements Comparable<Article>, Serializable {
 	private String mTitle;
 	private String mURL;
 	private Category mCategory;
-	private Spanned mContent;
+	private String mContent;
 
 	Article(int id, String title, String url, Category category) {
 		mID = id;
@@ -68,7 +69,7 @@ public class Article implements Comparable<Article>, Serializable {
 			Readability.parse(getURL(), new ReadabilityListener() {
 				@Override
 				public void onSuccess(ReadabilityResponse response) {
-					mContent = response.getParsedHtml();
+					mContent = prepareContent(response);
 					articleListener.onArticleLoaded(mContent);
 				}
 
@@ -90,15 +91,20 @@ public class Article implements Comparable<Article>, Serializable {
 			Readability.parse(mURL, new ReadabilityListener() {
 				@Override
 				public void onSuccess(ReadabilityResponse response) {
-					mContent = response.getParsedHtml();
+					mContent = prepareContent(response);
 				}
 
 				@Override
 				public void onError() {
 					Log.e(TAG, "Failed to fetch content for article " + mID);
-					mContent = new SpannableString("Failed to fetch content for article. Please visit the original source.");
+					mContent = "<h1>Failed to fetch content for article.</h1><p>Please visit the original source by pressing the icon on the action bar.</p>";
 				}
 			});
 		}
+	}
+
+	private String prepareContent(ReadabilityResponse response) {
+		return ("<h1>" + response.getTitle() + "</h1>" + response.getContent())
+				.replaceAll("<img.+?>", "");
 	}
 }

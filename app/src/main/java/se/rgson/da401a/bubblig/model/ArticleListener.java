@@ -4,6 +4,6 @@ import android.text.Spanned;
 
 public interface ArticleListener {
 
-	void onArticleLoaded(Spanned content);
+	void onArticleLoaded(String content);
 
 }

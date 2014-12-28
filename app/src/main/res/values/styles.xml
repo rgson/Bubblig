@@ -1,41 +1,33 @@
 <resources>
 
-    <style name="btn">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:height">50dp</item>
-        <item name="android:textSize">25dp</item>
-        <item name="android:background">#D7C5E0</item>
-        <item name="android:gravity">center</item>
-    </style>
+	<style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+		<item name="android:textViewStyle">@style/TextView</item>
+		<item name="android:buttonStyle">@style/Button</item>
+		<item name="android:listViewStyle">@style/ListView</item>
+	</style>
 
-    <style name="txtView">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_margin">20dp</item>
-    </style>
+	<style name="Button" parent="@android:style/Widget.Holo.Light.Button">
+		<item name="android:height">50dp</item>
+		<item name="android:textSize">@dimen/textsize_big</item>
+		<item name="android:background">#D7C5E0</item>
+		<item name="android:gravity">center</item>
+	</style>
 
-    <style name="lstView">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:dividerHeight">10.0sp</item>
-    </style>
+	<style name="TextView" parent="@android:style/Widget.Holo.Light.TextView">
+	</style>
 
-    <style name="txtView_cat">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:textSize">24sp</item>
-    </style>
+	<style name="ListView" parent="@android:style/Widget.Holo.Light.ListView">
+		<item name="android:dividerHeight">5dp</item>
+	</style>
 
-    <style name="imageView_cat">
-        <item name="android:layout_height">15dp</item>
-        <item name="android:layout_width">15dp</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:background">@drawable/color_circle</item>
-        <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:layout_marginRight">5dp</item>
-    </style>
+	<style name="TextView.Category">
+		<item name="android:textSize">@dimen/textsize_big</item>
+	</style>
+
+	<style name="ImageView"/>
+
+	<style name="ImageView.Category">
+		<item name="android:background">@drawable/color_circle</item>
+	</style>
 
 </resources>
