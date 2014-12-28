@@ -59,6 +59,12 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 			if (savedInstanceState != null) {
 				mArticleList.setSelection(savedInstanceState.getInt(BUNDLE_SELECTED));
 			}
+			mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+				@Override
+				public void onRefresh() {
+					mArticleAdapter.refresh();
+				}
+			});
 		}
 
 		mArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
