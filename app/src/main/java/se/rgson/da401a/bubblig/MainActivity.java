@@ -1,26 +1,37 @@
 package se.rgson.da401a.bubblig;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import se.rgson.da401a.bubblig.gui.ArticleFragment;
 import se.rgson.da401a.bubblig.gui.ArticleListFragment;
 import se.rgson.da401a.bubblig.gui.CategoryListFragment;
+import se.rgson.da401a.bubblig.gui.components.AboutFragment;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
 
 
-public class MainActivity extends Activity implements CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener {
+public class MainActivity extends FragmentActivity implements CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener, AboutFragment.OnFragmentInteractionListener {
 
 	private static String TAG = MainActivity.class.getSimpleName();
+
+    private Button gotoAbout;
 
 	private boolean mTabletLayout = false;
 	private float mDrawerOffset = 0.0f;
@@ -42,6 +53,7 @@ public class MainActivity extends Activity implements CategoryListFragment.Categ
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
+
 
 		mTabletLayout = (findViewById(R.id.article_container) != null);
 		mTitle = getResources().getString(R.string.app_name);
@@ -115,10 +127,17 @@ public class MainActivity extends Activity implements CategoryListFragment.Categ
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+            switch (item.getItemId()) {
+                case R.id.action_about:
+                    AboutFragment fragment = AboutFragment.newInstance("", "");
+                    FragmentManager fM = getFragmentManager();
+                    FragmentTransaction fT = fM.beginTransaction();
+                    fT.replace(R.id.container, fragment, null);
+                    fT.addToBackStack("about back");
+                    fT.commit();
+
+                default: return super.onOptionsItemSelected(item);
+            }
 	}
 
 	@Override
@@ -150,4 +169,18 @@ public class MainActivity extends Activity implements CategoryListFragment.Categ
 		}
 		mArticleFragment.setArticle(article);
 	}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //Inflates the actionbar
+        MenuInflater mif = getMenuInflater();
+        mif.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
