@@ -64,13 +64,13 @@ public class Article implements Comparable<Article>, Serializable {
 			throw new IllegalArgumentException("Argument must not be null.");
 		}
 		if (mContent != null) {
-			articleListener.onArticleLoaded(Html.fromHtml(mContent));
+			articleListener.onArticleLoaded(mContent);
 		} else {
 			Readability.parse(getURL(), new ReadabilityListener() {
 				@Override
 				public void onSuccess(ReadabilityResponse response) {
 					mContent = prepareContent(response);
-					articleListener.onArticleLoaded(Html.fromHtml(mContent));
+					articleListener.onArticleLoaded(mContent);
 				}
 
 				@Override

@@ -3,7 +3,9 @@ package se.rgson.da401a.bubblig.gui;
 import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,12 +56,7 @@ public class ArticleFragment extends Fragment {
 		mArticleContent = (TextView) root.findViewById(R.id.article_content);
 
 		if (mArticle != null) {
-			mArticle.getContent(new ArticleListener() {
-				@Override
-				public void onArticleLoaded(Spanned content) {
-					mArticleContent.setText(content);
-				}
-			});
+			new AsyncContentHandler().execute();
 
 			if (mShareAction != null) {
 				mShareAction.setShareIntent(new Intent(Intent.ACTION_SEND)
@@ -96,6 +93,26 @@ public class ArticleFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_ARTICLE, mArticle);
+	}
+
+	private class AsyncContentHandler extends AsyncTask<Void, Void, Spanned> {
+		@Override
+		protected Spanned doInBackground(Void... params) {
+			final Spanned[] spanned = new Spanned[1];
+			mArticle.getContent(new ArticleListener() {
+				@Override
+				public void onArticleLoaded(String content) {
+					spanned[0] = Html.fromHtml(content);
+				}
+			});
+			return spanned[0];
+		}
+
+		@Override
+		protected void onPostExecute(Spanned result) {
+			//TODO Huge time sink! Process in parts while scrolling, using append()
+			mArticleContent.setText(result);
+		}
 	}
 
 }
