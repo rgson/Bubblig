@@ -1,19 +1,13 @@
 package se.rgson.da401a.bubblig.gui;
 
 import android.app.Fragment;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import se.rgson.da401a.bubblig.R;
@@ -27,7 +21,6 @@ public class ArticleFragment extends Fragment {
 
 	private Article mArticle;
 	private TextView mArticleContent;
-	private ShareActionProvider mShareAction;
 
 	public static ArticleFragment newInstance(Article article) {
 		ArticleFragment fragment = new ArticleFragment();
@@ -40,7 +33,6 @@ public class ArticleFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
 		if (savedInstanceState != null) {
 			mArticle = (Article) savedInstanceState.getSerializable(BUNDLE_ARTICLE);
 		}
@@ -52,41 +44,11 @@ public class ArticleFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.fragment_article, container, false);
-
 		mArticleContent = (TextView) root.findViewById(R.id.article_content);
-
 		if (mArticle != null) {
 			new AsyncContentHandler().execute();
-
-			if (mShareAction != null) {
-				mShareAction.setShareIntent(new Intent(Intent.ACTION_SEND)
-						.setType("text/plain")
-						.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.share))
-						.putExtra(Intent.EXTRA_TEXT, mArticle.getURL()));
-			}
 		}
-
 		return root;
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.menu_article, menu);
-		mShareAction = (ShareActionProvider) menu.findItem(R.id.action_article_share).getActionProvider();
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.action_article_open:
-				if (mArticle != null) {
-					startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(mArticle.getURL())));
-					return true;
-				}
-			default:
-				return super.onOptionsItemSelected(item);
-		}
 	}
 
 	@Override

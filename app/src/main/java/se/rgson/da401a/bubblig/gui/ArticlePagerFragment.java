@@ -2,9 +2,14 @@ package se.rgson.da401a.bubblig.gui;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,6 +46,7 @@ public class ArticlePagerFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		if (savedInstanceState != null) {
 			mCategory = (Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY);
 		}
@@ -103,6 +109,24 @@ public class ArticlePagerFragment extends Fragment {
 	}
 
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.menu_article, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.action_article_open:
+				return openArticle();
+			case R.id.action_article_share:
+				return shareArticle();
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
@@ -121,6 +145,30 @@ public class ArticlePagerFragment extends Fragment {
 
 	public interface ArticlePagerFragmentListener {
 		void onDisplayedArticleChanged(Article article);
+	}
+
+	private boolean openArticle() {
+		if (mViewPager.getCurrentItem() != -1) {
+			Article currentArticle = mArticles.get(mViewPager.getCurrentItem());
+			Intent intent = new Intent(Intent.ACTION_VIEW)
+					.setData(Uri.parse(currentArticle.getURL()));
+			startActivity(intent);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean shareArticle() {
+		if (mViewPager.getCurrentItem() != -1) {
+			Article currentArticle = mArticles.get(mViewPager.getCurrentItem());
+			Intent intent = new Intent(Intent.ACTION_SEND)
+					.setType("text/plain")
+					.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.action_article_share))
+					.putExtra(Intent.EXTRA_TEXT, currentArticle.getURL());
+			startActivity(Intent.createChooser(intent, getResources().getString(R.string.action_article_share)));
+			return true;
+		}
+		return false;
 	}
 
 }
