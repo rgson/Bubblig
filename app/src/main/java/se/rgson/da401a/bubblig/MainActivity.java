@@ -115,12 +115,8 @@ public class MainActivity extends Activity implements
 
 		switch (item.getItemId()) {
 			case R.id.action_about:
-				AboutFragment fragment = AboutFragment.newInstance("", "");
-				FragmentManager fM = getFragmentManager();
-				FragmentTransaction fT = fM.beginTransaction();
-				fT.replace(R.id.container, fragment, null);
-				fT.addToBackStack("about back");
-				fT.commit();
+				showAbout();
+				return true;
 
 			default:
 				return super.onOptionsItemSelected(item);
@@ -165,5 +161,13 @@ public class MainActivity extends Activity implements
 	@Override
 	public void onFragmentInteraction(Uri uri) {
 
+	}
+
+	private void showAbout() {
+		int containerID = mTabletLayout ? R.id.article_container : R.id.container;
+		getFragmentManager().beginTransaction()
+				.replace(containerID, AboutFragment.newInstance("",""))
+				.addToBackStack(null)
+				.commit();
 	}
 }

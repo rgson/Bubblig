@@ -6,21 +6,24 @@
 	tools:context=".MainActivity"
 	android:id="@+id/drawer_layout">
 
-	<RelativeLayout
+	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:orientation="horizontal">
 
 		<FrameLayout
 			android:id="@+id/list_container"
 			android:layout_width="0dp"
-			android:layout_height="match_parent"/>
+			android:layout_height="match_parent"
+			android:layout_weight="33"/>
 
 		<FrameLayout
 			android:id="@+id/article_container"
 			android:layout_width="0dp"
-			android:layout_height="match_parent"/>
+			android:layout_height="match_parent"
+			android:layout_weight="67"/>
 
-	</RelativeLayout>
+	</LinearLayout>
 
 	<FrameLayout
 		android:id="@+id/drawer_container"
