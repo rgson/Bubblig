@@ -48,6 +48,7 @@ public class ArticleFragment extends Fragment {
 		if (mArticle != null) {
 			new AsyncContentHandler().execute();
 		}
+
 		return root;
 	}
 

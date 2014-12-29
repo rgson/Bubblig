@@ -2,19 +2,18 @@
 <resources>
 
 	<color name="whitesmoke">#f5f5f5</color>
-
-	<color name="category_nyheter">#ff5959</color>
+	<color name="category_nyheter">#000000</color>
 	<color name="category_världen">#ff9e59</color>
-	<color name="category_sverige">#ffe359</color>
-	<color name="category_blandat">#d6ff59</color>
-	<color name="category_media">#59ff67</color>
-	<color name="category_politik">#59ffac</color>
-	<color name="category_opinion">#59fff1</color>
-	<color name="category_europa">#59c8ff</color>
+	<color name="category_sverige">#CCCC00</color>
+	<color name="category_blandat">#6B246B</color>
+	<color name="category_media">#666600</color>
+	<color name="category_politik">#669933</color>
+	<color name="category_opinion">#660099</color>
+	<color name="category_europa">#CF7C29</color>
 	<color name="category_usa">#5983ff</color>
-	<color name="category_asien">#7559ff</color>
+	<color name="category_asien">#990000</color>
 	<color name="category_ekonomi">#ba59ff</color>
-	<color name="category_teknik">#ff59ff</color>
-	<color name="category_vetenskap">#ff5975</color>
+	<color name="category_teknik">#7559ff</color>
+	<color name="category_vetenskap">#996633</color>
 
 </resources>

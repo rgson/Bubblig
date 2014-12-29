@@ -1,10 +1,15 @@
 package se.rgson.da401a.bubblig.gui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,12 +48,61 @@ public class CategoryListFragment extends Fragment {
 				view.setSelected(true);
 				if (mListener != null) {
 					mListener.onCategorySelected((Category) mCategoryList.getItemAtPosition(position));
-				}
+
+                    Resources res = getResources();
+
+                    //Changes the actionbar color depending on the news subject.
+				    if (position == Category.NYHETER.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_nyheter));
+
+                    } else if (position == Category.VÄRLDEN.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_världen));
+
+                    }  else if (position == Category.SVERIGE.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_sverige));
+
+                    }  else if (position == Category.BLANDAT.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_blandat));
+
+                    }  else if (position == Category.MEDIA.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_media));
+
+                    }  else if (position == Category.POLITIK.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_politik));
+
+                    }  else if (position == Category.OPINION.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_opinion));
+
+                    }  else if (position == Category.EUROPA.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_europa));
+
+                    }  else if (position == Category.USA.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_usa));
+
+                    } else if (position == Category.ASIEN.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_asien));
+
+                    } else if (position == Category.EKONOMI.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_ekonomi));
+
+                    } else if (position == Category.TEKNIK.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_teknik));
+
+                    } else if (position == Category.VETENSKAP.ordinal()) {
+                        ChangeActionBarColor(res.getColor(R.color.category_vetenskap));
+                    }
+                }
 			}
 		});
 
 		return root;
 	}
+
+    public void ChangeActionBarColor(int color) {
+        ActionBar actionbar =  getActivity().getActionBar();
+        actionbar.setBackgroundDrawable(new ColorDrawable(color));
+    }
+
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {

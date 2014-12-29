@@ -3,8 +3,6 @@ package se.rgson.da401a.bubblig.gui.components;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
