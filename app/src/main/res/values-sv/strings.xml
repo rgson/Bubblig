@@ -3,5 +3,11 @@
 
 	<string name="action_article_share">Dela artikel</string>
 	<string name="action_article_open">Öppna i webbläsaren</string>
+	<string name="action_about">Om</string>
+	<string name="about_title">Om Bubblig</string>
+	<string name="about_text">
+		<![CDATA[<b>Bubblig</b> är en <u>inofficiell</u> nyhetsläsare för <a href="http://bubb.la/">Bubb.la</a>, en svensk samlingssida för nyhetsartiklar.]]>
+	</string>
+	<string name="about_disclaimer">Skapad av Johan Fredriksson och Robin Gustafsson.\nBubblig är inte kopplat till Bubb.la.</string>
 
 </resources>

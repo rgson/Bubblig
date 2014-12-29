@@ -1,16 +1,12 @@
 package se.rgson.da401a.bubblig;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +21,7 @@ import se.rgson.da401a.bubblig.model.Category;
 
 public class MainActivity extends Activity implements
 		CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener,
-		ArticlePagerFragment.ArticlePagerFragmentListener, AboutFragment.AboutFragmentListener {
+		ArticlePagerFragment.ArticlePagerFragmentListener {
 
 	private static String TAG = MainActivity.class.getSimpleName();
 
@@ -95,10 +91,19 @@ public class MainActivity extends Activity implements
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		int alpha = (int) (255 * (1 - mDrawerOffset));
 		for (int i = 0; i < menu.size(); i++) {
 			MenuItem item = menu.getItem(i);
+			if (item.getItemId() == R.id.action_about) {
+				continue;
+			}
 			if (item.getIcon() != null) {
 				item.getIcon().setAlpha(alpha);
 			}
@@ -149,25 +154,7 @@ public class MainActivity extends Activity implements
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//Inflates the actionbar
-		MenuInflater mif = getMenuInflater();
-		mif.inflate(R.menu.menu_main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public void onFragmentInteraction(Uri uri) {
-
-	}
-
 	private void showAbout() {
-		int containerID = mTabletLayout ? R.id.article_container : R.id.container;
-		getFragmentManager().beginTransaction()
-				.replace(containerID, AboutFragment.newInstance("",""))
-				.addToBackStack(null)
-				.commit();
+		AboutFragment.newInstance().show(getFragmentManager(), "about");
 	}
 }

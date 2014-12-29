@@ -1,25 +1,43 @@
-<FrameLayout
+<RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context="se.rgson.da401a.bubblig.gui.components.AboutFragment"
-	android:id="@+id/container_about">
+	android:id="@+id/container_about"
+	android:orientation="vertical"
+	android:padding="@dimen/about_padding">
 
 	<TextView
-		android:id="@+id/aboutList"
-		android:text="@string/about_app"
-		android:layout_height="match_parent"
-		android:layout_width="match_parent"
-		android:layout_margin="@dimen/textview_margin"/>
-
-
-	<Button
-		android:id="@+id/btn_about_back"
-		android:text="@string/btn_about_back"
-		android:layout_gravity="center_horizontal|bottom"
-		android:layout_width="fill_parent"
+		android:id="@+id/about_title"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="10dp"/>
+		android:layout_width="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="@dimen/about_margin"
+		style="@style/TextView.Title"/>
 
-</FrameLayout>
+	<TextView
+		android:id="@+id/about_text"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:layout_below="@id/about_title"
+		android:layout_marginBottom="@dimen/about_margin"/>
+
+	<ImageView
+		android:id="@+id/about_icon"
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		android:layout_below="@id/about_text"
+		android:layout_centerHorizontal="true"
+		android:background="@drawable/ic_launcher"
+		android:layout_marginBottom="@dimen/about_margin"/>
+
+	<TextView
+		android:text="@string/about_disclaimer"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/about_icon"
+		style="@style/TextView.Detail"/>
+
+</RelativeLayout>

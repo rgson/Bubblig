@@ -4,9 +4,14 @@
     <string name="app_name">Bubblig</string>
     <string name="action_article_share">Share article</string>
     <string name="action_article_open">Open in browser</string>
-    <string name="drawer_open">Open drawer</string>
-    <string name="drawer_close">Close drawer</string>
-	<string name="btn_about_back">Back</string>
-	<string name="about_app">Here we give credits!</string>
+	<string name="action_about">About</string>
+	<string name="about_title">About Bubblig</string>
+	<string name="about_text">
+		<![CDATA[<b>Bubblig</b> is an unofficial news reader app for <a href="http://bubb.la/">Bubb.la</a>, a Swedish news collection site.]]>
+	</string>
+	<string name="about_disclaimer">Created by Johan Fredriksson and Robin Gustafsson.\nBubblig is not affiliated with Bubb.la.</string>
+
+	<string name="drawer_open">Open drawer</string>
+	<string name="drawer_close">Close drawer</string>
 
 </resources>
