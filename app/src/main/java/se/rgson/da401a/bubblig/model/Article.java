@@ -104,7 +104,6 @@ public class Article implements Comparable<Article>, Serializable {
 	}
 
 	private String prepareContent(ReadabilityResponse response) {
-		return ("<h1>" + response.getTitle() + "</h1>" + response.getContent())
-				.replaceAll("<img.+?>", "");
+		return ("<h1>" + response.getTitle() + "</h1>" + response.getContent());
 	}
 }

@@ -31,7 +31,7 @@ public class Readability {
 		if (articleUrl == null || listener == null) {
 			throw new IllegalArgumentException("Arguments must not be null.");
 		}
-		new AsyncParser().execute(articleUrl, listener);
+		new AsyncParser().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, articleUrl, listener);
 	}
 
 	/**

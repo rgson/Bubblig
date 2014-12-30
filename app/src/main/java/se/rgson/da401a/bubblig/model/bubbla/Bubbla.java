@@ -37,7 +37,7 @@ public class Bubbla {
 		if (feed == null || listener == null) {
 			throw new IllegalArgumentException("Arguments must not be null.");
 		}
-		new AsyncReader().execute(feed, listener);
+		new AsyncReader().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, feed, listener);
 	}
 
 	/**

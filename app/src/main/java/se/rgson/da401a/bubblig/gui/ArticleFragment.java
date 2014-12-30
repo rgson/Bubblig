@@ -47,7 +47,7 @@ public class ArticleFragment extends Fragment {
 		View root = inflater.inflate(R.layout.fragment_article, container, false);
 		mArticleContent = (TextView) root.findViewById(R.id.article_content);
 		if (mArticle != null) {
-			new AsyncContentHandler().execute();
+			new AsyncContentHandler().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 
 		return root;
