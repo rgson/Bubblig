@@ -65,6 +65,9 @@ public class ArticleFragment extends Fragment {
 			mArticle.getContent(new ArticleListener() {
 				@Override
 				public void onArticleLoaded(String content) {
+					if (content.isEmpty()) {
+						content = getResources().getString(R.string.article_loading_failed);
+					}
 					spanned[0] = Html.fromHtml(content);
 				}
 			});
