@@ -1,8 +1,5 @@
 package se.rgson.da401a.bubblig.model;
 
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -63,22 +60,7 @@ public class Article implements Comparable<Article>, Serializable {
 		if (articleListener == null) {
 			throw new IllegalArgumentException("Argument must not be null.");
 		}
-		if (mContent != null) {
-			articleListener.onArticleLoaded(mContent);
-		} else {
-			Readability.parse(getURL(), new ReadabilityListener() {
-				@Override
-				public void onSuccess(ReadabilityResponse response) {
-					mContent = prepareContent(response);
-					articleListener.onArticleLoaded(mContent);
-				}
-
-				@Override
-				public void onError() {
-					Log.e(TAG, "Failed to fetch content for article " + mID);
-				}
-			});
-		}
+		fetchContent(articleListener);
 		mCategory.prefetchAroundArticle(this);
 	}
 
@@ -87,23 +69,35 @@ public class Article implements Comparable<Article>, Serializable {
 	 * Does nothing if the article has already been fetched.
 	 */
 	void fetch() {
-		if (mContent == null) {
-			Readability.parse(mURL, new ReadabilityListener() {
+		fetchContent(null);
+	}
+
+	private void fetchContent(final ArticleListener articleListener) {
+		if (mContent != null) {
+			if (articleListener != null) {
+				articleListener.onArticleLoaded(mContent);
+			}
+		}
+		else {
+			Readability.parse(getURL(), new ReadabilityListener() {
 				@Override
 				public void onSuccess(ReadabilityResponse response) {
-					mContent = prepareContent(response);
+					mContent = "<h1>" + response.getTitle() + "</h1>" + response.getContent();
+					if (articleListener != null) {
+						articleListener.onArticleLoaded(mContent);
+					}
 				}
 
 				@Override
 				public void onError() {
 					Log.e(TAG, "Failed to fetch content for article " + mID);
-					mContent = "<h1>Failed to fetch content for article.</h1><p>Please visit the original source by pressing the icon on the action bar.</p>";
+					mContent = "";
+					if (articleListener != null) {
+						articleListener.onArticleLoaded(mContent);
+					}
 				}
 			});
 		}
 	}
 
-	private String prepareContent(ReadabilityResponse response) {
-		return ("<h1>" + response.getTitle() + "</h1>" + response.getContent());
-	}
 }
