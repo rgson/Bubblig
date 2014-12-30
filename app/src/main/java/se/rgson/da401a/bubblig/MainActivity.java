@@ -25,6 +25,11 @@ public class MainActivity extends Activity
 
 	private static String TAG = MainActivity.class.getSimpleName();
 
+	private static String FRAGMENT_CATEGORY_LIST = "FRAGMENT_CATEGORY_LIST";
+	private static String FRAGMENT_ARTICLE_LIST = "FRAGMENT_ARTICLE_LIST";
+	private static String FRAGMENT_ARTICLE_PAGER = "FRAGMENT_ARTICLE_PAGER";
+	private static String FRAGMENT_ABOUT = "FRAGMENT_ABOUT";
+
 	private boolean mTabletLayout = false;
 	private float mDrawerOffset = 0.0f;
 	private Category mCategory;
@@ -48,8 +53,8 @@ public class MainActivity extends Activity
 		if (savedInstanceState == null) {
 			int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
 			getFragmentManager().beginTransaction()
-					.add(R.id.drawer_container, CategoryListFragment.newInstance())
-					.add(articleListContainerID, ArticleListFragment.newInstance(mCategory))
+					.add(R.id.drawer_container, CategoryListFragment.newInstance(), FRAGMENT_CATEGORY_LIST)
+					.add(articleListContainerID, ArticleListFragment.newInstance(mCategory), FRAGMENT_ARTICLE_LIST)
 					.commit();
 		}
 
@@ -129,7 +134,7 @@ public class MainActivity extends Activity
 		setCategory(category);
 		int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
 		getFragmentManager().beginTransaction()
-				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory))
+				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory), FRAGMENT_ARTICLE_LIST)
 				.commit();
 		mDrawerLayout.closeDrawers();
 	}
@@ -138,7 +143,7 @@ public class MainActivity extends Activity
 	public void onArticleSelected(Article article) {
 		int articlePagerContainerID = mTabletLayout ? R.id.article_container : R.id.container;
 		getFragmentManager().beginTransaction()
-				.replace(articlePagerContainerID, ArticlePagerFragment.newInstance(mCategory, article))
+				.replace(articlePagerContainerID, ArticlePagerFragment.newInstance(mCategory, article), FRAGMENT_ARTICLE_PAGER)
 				.commit();
 	}
 
@@ -156,6 +161,6 @@ public class MainActivity extends Activity
 	}
 
 	private void showAbout() {
-		AboutFragment.newInstance().show(getFragmentManager(), "about");
+		AboutFragment.newInstance().show(getFragmentManager(), FRAGMENT_ABOUT);
 	}
 }

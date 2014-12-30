@@ -15,8 +15,8 @@ import se.rgson.da401a.bubblig.model.Category;
 
 public class CategoryListFragment extends Fragment {
 
-	public static final String TAG = CategoryListFragment.class.getSimpleName();
-	public static final String BUNDLE_SELECTED = "BUNDLE_SELECTED";
+	private static final String TAG = CategoryListFragment.class.getSimpleName();
+	private static final String BUNDLE_SELECTED = "BUNDLE_SELECTED";
 
 	private CategoryListFragmentListener mListener;
 	private ListView mCategoryList;

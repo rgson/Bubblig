@@ -30,6 +30,7 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 		if (mListener != null) {
 			mListener.isRefreshing(true);
 		}
+		mCategory.invalidate();
 		mCategory.getArticles(new CategoryListener() {
 			@Override
 			public void onCategoryLoaded(ArrayList<Article> articles) {

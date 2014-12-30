@@ -114,4 +114,10 @@ public enum Category {
 		}
 	}
 
+	/**
+	 * Invalidates the cached article list.
+	 */
+	public void invalidate() {
+		mArticles = null;
+	}
 }
