@@ -2,6 +2,7 @@ package se.rgson.da401a.bubblig;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -9,28 +10,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
+import se.rgson.da401a.bubblig.gui.AboutFragment;
 import se.rgson.da401a.bubblig.gui.ArticleListFragment;
 import se.rgson.da401a.bubblig.gui.ArticlePagerFragment;
 import se.rgson.da401a.bubblig.gui.CategoryListFragment;
-import se.rgson.da401a.bubblig.gui.components.AboutFragment;
+import se.rgson.da401a.bubblig.gui.GuiUtility;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
 
 
-public class MainActivity extends Activity implements
-		CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener,
-		ArticlePagerFragment.ArticlePagerFragmentListener {
+public class MainActivity extends Activity
+		implements CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener, ArticlePagerFragment.ArticlePagerFragmentListener {
 
 	private static String TAG = MainActivity.class.getSimpleName();
-
-	private Button gotoAbout;
 
 	private boolean mTabletLayout = false;
 	private float mDrawerOffset = 0.0f;
 	private Category mCategory;
-
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 
@@ -45,9 +42,8 @@ public class MainActivity extends Activity implements
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-
 		mTabletLayout = (findViewById(R.id.article_container) != null);
-		mCategory = Category.NYHETER;
+		setCategory(Category.NYHETER);
 
 		if (savedInstanceState == null) {
 			int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
@@ -130,12 +126,11 @@ public class MainActivity extends Activity implements
 
 	@Override
 	public void onCategorySelected(Category category) {
-		mCategory = category;
+		setCategory(category);
 		int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
 		getFragmentManager().beginTransaction()
 				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory))
 				.commit();
-		setTitle(mCategory.toString());
 		mDrawerLayout.closeDrawers();
 	}
 
@@ -150,8 +145,14 @@ public class MainActivity extends Activity implements
 	@Override
 	public void onDisplayedArticleChanged(Article article) {
 		if (mTabletLayout) {
-			// Update ListView to match displayed article.
+			//TODO Update ListView to match displayed article.
 		}
+	}
+
+	private void setCategory(Category category) {
+		mCategory = category;
+		setTitle(mCategory.toString());
+		getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(this, mCategory)));
 	}
 
 	private void showAbout() {

@@ -1,7 +1,6 @@
 package se.rgson.da401a.bubblig.gui.components;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;

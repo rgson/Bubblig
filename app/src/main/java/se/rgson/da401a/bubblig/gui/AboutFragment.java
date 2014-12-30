@@ -1,4 +1,4 @@
-package se.rgson.da401a.bubblig.gui.components;
+package se.rgson.da401a.bubblig.gui;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se.rgson.da401a.bubblig.R;
-
 
 public class AboutFragment extends DialogFragment {
 

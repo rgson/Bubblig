@@ -21,7 +21,6 @@ import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
 import se.rgson.da401a.bubblig.model.CategoryListener;
 
-
 public class ArticlePagerFragment extends Fragment {
 
 	private static final String TAG = ArticlePagerFragment.class.getSimpleName();

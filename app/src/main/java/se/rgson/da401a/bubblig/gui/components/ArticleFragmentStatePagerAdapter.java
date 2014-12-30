@@ -11,6 +11,8 @@ import se.rgson.da401a.bubblig.model.Article;
 
 public class ArticleFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
+	private static String TAG = ArticleFragmentStatePagerAdapter.class.getSimpleName();
+
 	private ArrayList<Article> mArticles;
 
 	public ArticleFragmentStatePagerAdapter(FragmentManager fm, ArrayList<Article> articles) {
