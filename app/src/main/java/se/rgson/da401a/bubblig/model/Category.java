@@ -2,6 +2,8 @@ package se.rgson.da401a.bubblig.model;
 
 import android.util.Log;
 
+import org.unbescape.html.HtmlEscape;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public enum Category {
 				public void onSuccess(List<BubblaArticle> articles) {
 					mArticles = new ArrayList<>(articles.size());
 					for (BubblaArticle bubblaArticle : articles) {
-						mArticles.add(new Article(bubblaArticle.getID(), bubblaArticle.getTitle(), bubblaArticle.getURL(), Category.this));
+						mArticles.add(new Article(bubblaArticle.getID(), HtmlEscape.unescapeHtml(bubblaArticle.getTitle()), bubblaArticle.getURL(), Category.this));
 					}
 					prefetchArticles(0);
 					categoryListener.onCategoryLoaded(mArticles);
