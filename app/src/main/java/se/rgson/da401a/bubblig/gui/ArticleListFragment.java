@@ -2,6 +2,7 @@ package se.rgson.da401a.bubblig.gui;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -78,6 +79,14 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 		});
 
 		return root;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Activity activity = getActivity();
+		activity.getActionBar().setTitle(mCategory.toString());
+		activity.getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(activity, mCategory)));
 	}
 
 	@Override
