@@ -5,7 +5,9 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,12 +28,13 @@ public class ArticlePagerFragment extends Fragment {
 	private static final String TAG = ArticlePagerFragment.class.getSimpleName();
 	private static final String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
 	private static final String BUNDLE_ARTICLE = "BUNDLE_ARTICLE";
+	private static final String BUNDLE_CURRENT = "BUNDLE_CURRENT";
+	private static final String BUNDLE_ADAPTER = "BUNDLE_ADAPTER";
 
 	private ArticlePagerFragmentListener mListener;
 	private ViewPager mViewPager;
 	private ArticleFragmentStatePagerAdapter mAdapter;
 	private Category mCategory;
-	private ArrayList<Article> mArticles;
 
 	public static ArticlePagerFragment newInstance(Category category, Article article) {
 		ArticlePagerFragment fragment = new ArticlePagerFragment();
@@ -44,34 +47,44 @@ public class ArticlePagerFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		if (savedInstanceState != null) {
+			Log.d(TAG, "with savedInstanceState");
 			mCategory = (Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY);
 		}
 		else if (getArguments() != null) {
+			Log.d(TAG, "with Arguments");
 			mCategory = (Category) getArguments().getSerializable(BUNDLE_CATEGORY);
+		}
+		else {
+			throw new IllegalArgumentException("A category must be provided.");
 		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.d(TAG, "onCreateView");
 		View root = inflater.inflate(R.layout.fragment_article_pager, container, false);
 
 		mViewPager = (ViewPager) root.findViewById(R.id.article_view_pager);
-		mViewPager.setOffscreenPageLimit(2);
+		//mViewPager.setOffscreenPageLimit(2);
 
-		if (mCategory != null) {
+		if (savedInstanceState != null) {
+			mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), new ArrayList<Article>());
+			mAdapter.restoreState(savedInstanceState.getParcelable(BUNDLE_ADAPTER), getActivity().getClassLoader());
+			mViewPager.setAdapter(mAdapter);
+			mViewPager.setCurrentItem(savedInstanceState.getInt(BUNDLE_CURRENT), false);
+		}
+		else {
 			mCategory.getArticles(new CategoryListener() {
 				@Override
 				public void onCategoryLoaded(ArrayList<Article> articles) {
-					mArticles = articles;
-					mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), mArticles);
+					mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), articles);
 					mViewPager.setAdapter(mAdapter);
-					if (getArguments() != null) {
-						Article currentArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
-						mViewPager.setCurrentItem(articles.indexOf(currentArticle));
-					}
+					Article currentArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
+					mViewPager.setCurrentItem(articles.indexOf(currentArticle));
 				}
 			});
 		}
@@ -85,7 +98,7 @@ public class ArticlePagerFragment extends Fragment {
 			@Override
 			public void onPageSelected(int position) {
 				if (mListener != null) {
-					mListener.onDisplayedArticleChanged(mArticles.get(position));
+					mListener.onDisplayedArticleChanged(mAdapter.getArticle(position));
 				}
 			}
 
@@ -100,11 +113,11 @@ public class ArticlePagerFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		Log.d(TAG, "onSaveInstanceState");
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
-		if (mViewPager.getCurrentItem() != -1) {
-			outState.putSerializable(BUNDLE_ARTICLE, mArticles.get(mViewPager.getCurrentItem()));
-		}
+		outState.putParcelable(BUNDLE_ADAPTER, mViewPager.getAdapter().saveState());
+		outState.putInt(BUNDLE_CURRENT, mViewPager.getCurrentItem());
 	}
 
 	@Override
@@ -148,7 +161,7 @@ public class ArticlePagerFragment extends Fragment {
 
 	private boolean openArticle() {
 		if (mViewPager.getCurrentItem() != -1) {
-			Article currentArticle = mArticles.get(mViewPager.getCurrentItem());
+			Article currentArticle = mAdapter.getArticle(mViewPager.getCurrentItem());
 			Intent intent = new Intent(Intent.ACTION_VIEW)
 					.setData(Uri.parse(currentArticle.getURL()));
 			startActivity(intent);
@@ -159,7 +172,7 @@ public class ArticlePagerFragment extends Fragment {
 
 	private boolean shareArticle() {
 		if (mViewPager.getCurrentItem() != -1) {
-			Article currentArticle = mArticles.get(mViewPager.getCurrentItem());
+			Article currentArticle = mAdapter.getArticle(mViewPager.getCurrentItem());
 			Intent intent = new Intent(Intent.ACTION_SEND)
 					.setType("text/plain")
 					.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.action_article_share))

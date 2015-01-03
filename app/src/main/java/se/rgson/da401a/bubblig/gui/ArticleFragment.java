@@ -1,11 +1,14 @@
 package se.rgson.da401a.bubblig.gui;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +36,18 @@ public class ArticleFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
+			Log.d(TAG, "with savedinstanceState");
 			mArticle = (Article) savedInstanceState.getSerializable(BUNDLE_ARTICLE);
 		}
 		else if (getArguments() != null) {
+			Log.d(TAG, "with Arguments");
 			mArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
+		}
+		else {
+			throw new IllegalArgumentException("An article must be provided.");
 		}
 	}
 
@@ -46,15 +55,21 @@ public class ArticleFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.fragment_article, container, false);
 		mArticleContent = (TextView) root.findViewById(R.id.article_content);
-		if (mArticle != null) {
-			new AsyncContentHandler().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		}
-
+		new AsyncContentHandler().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		return root;
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		Activity activity = getActivity();
+		activity.getActionBar().setTitle(mArticle.getCategory().toString());
+		activity.getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(activity, mArticle.getCategory())));
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		Log.d(TAG, "onSaveInstanceState");
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_ARTICLE, mArticle);
 	}
@@ -77,7 +92,7 @@ public class ArticleFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(Spanned result) {
-			//TODO Huge time sink! Process in parts while scrolling, using append()
+			//TODO Huge time sink! Process in parts while scrolling, using append().
 			mArticleContent.setText(result);
 		}
 	}
