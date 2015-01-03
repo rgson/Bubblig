@@ -20,7 +20,7 @@
 			android:layout_marginLeft="16dp"
 			android:layout_marginRight="16dp"
 			android:layout_weight="1.0"
-            android:textSize="20sp" />
+			android:textSize="20sp"/>
 
 	</ScrollView>
 

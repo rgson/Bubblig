@@ -17,7 +17,7 @@
 	</style>
 
 	<style name="ListView" parent="@android:style/Widget.Holo.Light.ListView">
-        <item name="android:divider">@null</item>
+		<item name="android:divider">@null</item>
 		<item name="android:dividerHeight">10dp</item>
 	</style>
 

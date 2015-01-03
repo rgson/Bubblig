@@ -17,23 +17,23 @@
 	<color name="category_teknik">#7559ff</color>
 	<color name="category_vetenskap">#996633</color>
 
-    <color name="row_click_item">#D8D8D8</color>
-    <color name="row_lst_item_odd">#f7f7f7FF</color>
-    <color name="row_lst_item_even">#FFFFFFFF</color>
+	<color name="row_click_item">#D8D8D8</color>
+	<color name="row_lst_item_odd">#f7f7f7FF</color>
+	<color name="row_lst_item_even">#FFFFFFFF</color>
 
-    <!-- The webbsite for the color tint is: "http://www.color-hex.com/".-->
-    <color name="row_category_nyheter">#e8f1ee</color>
-    <color name="row_category_världen">#f9f0e5</color>
-    <color name="row_category_sverige">#f9f9e5</color>
-    <color name="row_category_blandat">#f0e9f0</color>
-    <color name="row_category_media">#efefe5</color>
-    <color name="row_category_politik">#eff4ea</color>
-    <color name="row_category_opinion">#efe5f4</color>
-    <color name="row_category_europa">#faf1e9</color>
-    <color name="row_category_usa">#eaecee</color>
-    <color name="row_category_asien">#f4e5e5</color>
-    <color name="row_category_ekonomi">#f7eff5</color>
-    <color name="row_category_teknik">#f1eeff</color>
-    <color name="row_category_vetenskap">#f4efea</color>
+	<!-- The webbsite for the color tint is: "http://www.color-hex.com/".-->
+	<color name="row_category_nyheter">#e8f1ee</color>
+	<color name="row_category_världen">#f9f0e5</color>
+	<color name="row_category_sverige">#f9f9e5</color>
+	<color name="row_category_blandat">#f0e9f0</color>
+	<color name="row_category_media">#efefe5</color>
+	<color name="row_category_politik">#eff4ea</color>
+	<color name="row_category_opinion">#efe5f4</color>
+	<color name="row_category_europa">#faf1e9</color>
+	<color name="row_category_usa">#eaecee</color>
+	<color name="row_category_asien">#f4e5e5</color>
+	<color name="row_category_ekonomi">#f7eff5</color>
+	<color name="row_category_teknik">#f1eeff</color>
+	<color name="row_category_vetenskap">#f4efea</color>
 
 </resources>
