@@ -22,7 +22,8 @@
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
 		android:layout_below="@id/about_title"
-		android:layout_marginBottom="@dimen/about_margin"/>
+		android:layout_marginBottom="@dimen/about_margin"
+		android:textSize="20sp"/>
 
 	<ImageView
 		android:id="@+id/about_icon"

@@ -1,10 +1,15 @@
 package se.rgson.da401a.bubblig.gui.components;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
+import se.rgson.da401a.bubblig.R;
+import se.rgson.da401a.bubblig.gui.GuiUtility;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
 import se.rgson.da401a.bubblig.model.CategoryListener;
@@ -43,8 +48,23 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 		});
 	}
 
+	//Sets the row color in Article ListView depending on the category!
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View view = super.getView(position, convertView, parent);
+
+		Resources res = parent.getResources();
+		if (position % 2 == 0) {
+			view.setBackgroundColor(res.getColor(R.color.row_lst_item_even));
+		}
+		else {
+			view.setBackgroundColor(GuiUtility.findLighterColorForRow(mCategory, parent));
+		}
+
+		return view;
+	}
+
 	public interface ArticleListAdapterListener {
 		void isRefreshing(boolean refreshing);
 	}
-
 }
