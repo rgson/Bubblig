@@ -22,7 +22,7 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 	private ArticleListAdapterListener mListener;
 
 	public ArticleListAdapter(Context context, Category category, ArticleListAdapterListener listener) {
-		super(context, android.R.layout.simple_list_item_1);
+		super(context, R.layout.listrow_article);
 		if (category == null) {
 			throw new IllegalArgumentException("Category must not be null.");
 		}
