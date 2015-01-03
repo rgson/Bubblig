@@ -17,7 +17,8 @@
 	</style>
 
 	<style name="ListView" parent="@android:style/Widget.Holo.Light.ListView">
-		<item name="android:dividerHeight">5dp</item>
+        <item name="android:divider">@null</item>
+		<item name="android:dividerHeight">10dp</item>
 	</style>
 
 	<style name="TextView.Category">
@@ -30,7 +31,7 @@
 	</style>
 
 	<style name="TextView.Detail">
-		<item name="android:textSize">@dimen/textsize_small</item>
+		<item name="android:textSize">15sp</item>
 		<item name="android:textStyle">italic</item>
 		<item name="android:textColor">@color/detail</item>
 	</style>

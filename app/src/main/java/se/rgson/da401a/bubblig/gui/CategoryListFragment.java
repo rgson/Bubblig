@@ -2,6 +2,7 @@ package se.rgson.da401a.bubblig.gui;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

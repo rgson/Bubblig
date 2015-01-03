@@ -1,6 +1,7 @@
 package se.rgson.da401a.bubblig.gui;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;

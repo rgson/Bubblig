@@ -2,6 +2,7 @@ package se.rgson.da401a.bubblig.gui;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -56,14 +57,16 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 		if (mCategory != null) {
 			mArticleAdapter = new ArticleListAdapter(getActivity(), mCategory, this);
 			mArticleList.setAdapter(mArticleAdapter);
-			if (savedInstanceState != null) {
+
+            if (savedInstanceState != null) {
 				mArticleList.setSelection(savedInstanceState.getInt(BUNDLE_SELECTED));
-			}
+            }
+
 			mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 				@Override
 				public void onRefresh() {
 					mArticleAdapter.refresh();
-				}
+                }
 			});
 		}
 
@@ -73,6 +76,8 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 				view.setSelected(true);
 				if (mListener != null) {
 					mListener.onArticleSelected(mArticleAdapter.getItem(position));
+                    Resources res = getResources();
+                    view.setBackgroundColor(res.getColor(R.color.row_click_item));
 				}
 			}
 		});

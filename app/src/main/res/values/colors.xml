@@ -3,18 +3,37 @@
 
 	<color name="whitesmoke">#f5f5f5</color>
 	<color name="detail">#636265</color>
-	<color name="category_nyheter">#222222</color>
-	<color name="category_världen">#ff9e59</color>
+	<color name="category_nyheter">#1E745C</color>
+	<color name="category_världen">#CC6F00</color>
 	<color name="category_sverige">#CCCC00</color>
 	<color name="category_blandat">#6B246B</color>
 	<color name="category_media">#666600</color>
 	<color name="category_politik">#669933</color>
 	<color name="category_opinion">#660099</color>
 	<color name="category_europa">#CF7C29</color>
-	<color name="category_usa">#5983ff</color>
+	<color name="category_usa">#324259</color>
 	<color name="category_asien">#990000</color>
-	<color name="category_ekonomi">#ba59ff</color>
+	<color name="category_ekonomi">#B15FA0</color>
 	<color name="category_teknik">#7559ff</color>
 	<color name="category_vetenskap">#996633</color>
+
+    <color name="row_click_item">#D8D8D8</color>
+    <color name="row_lst_item_odd">#f7f7f7FF</color>
+    <color name="row_lst_item_even">#FFFFFFFF</color>
+
+    <!-- The webbsite for the color tint is: "http://www.color-hex.com/".-->
+    <color name="row_category_nyheter">#e8f1ee</color>
+    <color name="row_category_världen">#f9f0e5</color>
+    <color name="row_category_sverige">#f9f9e5</color>
+    <color name="row_category_blandat">#f0e9f0</color>
+    <color name="row_category_media">#efefe5</color>
+    <color name="row_category_politik">#eff4ea</color>
+    <color name="row_category_opinion">#efe5f4</color>
+    <color name="row_category_europa">#faf1e9</color>
+    <color name="row_category_usa">#eaecee</color>
+    <color name="row_category_asien">#f4e5e5</color>
+    <color name="row_category_ekonomi">#f7eff5</color>
+    <color name="row_category_teknik">#f1eeff</color>
+    <color name="row_category_vetenskap">#f4efea</color>
 
 </resources>
