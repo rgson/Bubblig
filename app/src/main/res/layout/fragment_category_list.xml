@@ -8,6 +8,6 @@
 		android:id="@+id/category_list"
 		android:layout_height="match_parent"
 		android:layout_width="match_parent"
-		android:background="@color/whitesmoke" />
+		android:background="@color/whitesmoke"/>
 
 </FrameLayout>

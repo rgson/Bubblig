@@ -2,7 +2,7 @@ package se.rgson.da401a.bubblig.gui;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -19,13 +19,11 @@ import se.rgson.da401a.bubblig.model.Category;
 public class ArticleListFragment extends Fragment implements ArticleListAdapter.ArticleListAdapterListener {
 
 	private static final String TAG = ArticleListFragment.class.getSimpleName();
-	private static final String BUNDLE_SELECTED = "BUNDLE_SELECTED";
 	private static final String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
 
 	private ArticleListFragmentListener mListener;
-	private ListView mArticleList;
-	private ArticleListAdapter mArticleAdapter;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
+	private ListView mArticleList;
 	private Category mCategory;
 
 	public static ArticleListFragment newInstance(Category category) {
@@ -45,6 +43,9 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 		else if (getArguments() != null) {
 			mCategory = (Category) getArguments().getSerializable(BUNDLE_CATEGORY);
 		}
+		else {
+			throw new IllegalArgumentException("A category must be provided.");
+		}
 	}
 
 	@Override
@@ -54,30 +55,22 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 		mArticleList = (ListView) root.findViewById(R.id.article_list);
 		mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.article_swipe_refresh_layout);
 
-		if (mCategory != null) {
-			mArticleAdapter = new ArticleListAdapter(getActivity(), mCategory, this);
-			mArticleList.setAdapter(mArticleAdapter);
+		final ArticleListAdapter adapter = new ArticleListAdapter(getActivity(), mCategory, this);
+		mArticleList.setAdapter(adapter);
 
-            if (savedInstanceState != null) {
-				mArticleList.setSelection(savedInstanceState.getInt(BUNDLE_SELECTED));
-            }
-
-			mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-				@Override
-				public void onRefresh() {
-					mArticleAdapter.refresh();
-                }
-			});
-		}
+		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				adapter.refresh();
+			}
+		});
 
 		mArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				view.setSelected(true);
 				if (mListener != null) {
-					mListener.onArticleSelected(mArticleAdapter.getItem(position));
-                    Resources res = getResources();
-                    view.setBackgroundColor(res.getColor(R.color.row_click_item));
+					mListener.onArticleSelected(adapter.getItem(position));
 				}
 			}
 		});
@@ -86,10 +79,17 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		Activity activity = getActivity();
+		activity.getActionBar().setTitle(mCategory.toString());
+		activity.getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(activity, mCategory)));
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
-		outState.putInt(BUNDLE_SELECTED, mArticleList.getSelectedItemPosition());
 	}
 
 	@Override

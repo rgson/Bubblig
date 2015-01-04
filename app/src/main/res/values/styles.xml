@@ -6,19 +6,12 @@
 		<item name="android:listViewStyle">@style/ListView</item>
 	</style>
 
-	<style name="Button" parent="@android:style/Widget.Holo.Light.Button">
-		<item name="android:height">50dp</item>
-		<item name="android:textSize">@dimen/textsize_big</item>
-		<item name="android:background">#D7C5E0</item>
-		<item name="android:gravity">center</item>
-	</style>
+	<style name="Button" parent="@android:style/Widget.Holo.Light.Button"/>
+
+	<style name="ListView" parent="@android:style/Widget.Holo.Light.ListView"/>
 
 	<style name="TextView" parent="@android:style/Widget.Holo.Light.TextView">
-	</style>
-
-	<style name="ListView" parent="@android:style/Widget.Holo.Light.ListView">
-        <item name="android:divider">@null</item>
-		<item name="android:dividerHeight">10dp</item>
+		<item name="android:textSize">@dimen/textsize_normal</item>
 	</style>
 
 	<style name="TextView.Category">

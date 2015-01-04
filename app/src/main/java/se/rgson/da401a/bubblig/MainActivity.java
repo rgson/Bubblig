@@ -48,7 +48,7 @@ public class MainActivity extends Activity
 		getActionBar().setHomeButtonEnabled(true);
 
 		mTabletLayout = (findViewById(R.id.article_container) != null);
-		setCategory(Category.NYHETER);
+		mCategory = Category.NYHETER;
 
 		if (savedInstanceState == null) {
 			int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
@@ -131,10 +131,11 @@ public class MainActivity extends Activity
 
 	@Override
 	public void onCategorySelected(Category category) {
-		setCategory(category);
+		mCategory = category;
 		int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
 		getFragmentManager().beginTransaction()
 				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory), FRAGMENT_ARTICLE_LIST)
+				.addToBackStack(null)
 				.commit();
 		mDrawerLayout.closeDrawers();
 	}
@@ -144,6 +145,7 @@ public class MainActivity extends Activity
 		int articlePagerContainerID = mTabletLayout ? R.id.article_container : R.id.container;
 		getFragmentManager().beginTransaction()
 				.replace(articlePagerContainerID, ArticlePagerFragment.newInstance(mCategory, article), FRAGMENT_ARTICLE_PAGER)
+				.addToBackStack(null)
 				.commit();
 	}
 
@@ -152,12 +154,6 @@ public class MainActivity extends Activity
 		if (mTabletLayout) {
 			//TODO Update ListView to match displayed article.
 		}
-	}
-
-	private void setCategory(Category category) {
-		mCategory = category;
-		setTitle(mCategory.toString());
-		getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(this, mCategory)));
 	}
 
 	private void showAbout() {
