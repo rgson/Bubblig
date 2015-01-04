@@ -26,6 +26,8 @@ public class MainActivity extends Activity
 
 	private static String TAG = MainActivity.class.getSimpleName();
 
+	private static String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
+
 	private static String FRAGMENT_CATEGORY_LIST = "FRAGMENT_CATEGORY_LIST";
 	private static String FRAGMENT_ARTICLE_LIST = "FRAGMENT_ARTICLE_LIST";
 	private static String FRAGMENT_ARTICLE_PAGER = "FRAGMENT_ARTICLE_PAGER";
@@ -49,7 +51,13 @@ public class MainActivity extends Activity
 		getActionBar().setHomeButtonEnabled(true);
 
 		mTabletLayout = (findViewById(R.id.article_container) != null);
-		mCategory = Category.NYHETER;
+
+		if (savedInstanceState != null) {
+			mCategory = (Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY);
+		}
+		else {
+			mCategory = Category.NYHETER;
+		}
 
 		if (savedInstanceState == null) {
 			int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
@@ -84,6 +92,13 @@ public class MainActivity extends Activity
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		mDrawerToggle.syncState();
+		updateActionbar();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
 	}
 
 	@Override
@@ -139,6 +154,7 @@ public class MainActivity extends Activity
 				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory), FRAGMENT_ARTICLE_LIST)
 				.commit();
 		mDrawerLayout.closeDrawers();
+		updateActionbar();
 	}
 
 	@Override
@@ -159,5 +175,10 @@ public class MainActivity extends Activity
 
 	private void showAbout() {
 		AboutFragment.newInstance().show(getFragmentManager(), FRAGMENT_ABOUT);
+	}
+
+	private void updateActionbar() {
+		getActionBar().setTitle(mCategory.toString());
+		getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(this, mCategory)));
 	}
 }

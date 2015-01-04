@@ -1,8 +1,6 @@
 package se.rgson.da401a.bubblig.gui;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -52,14 +50,6 @@ public class ArticleFragment extends Fragment {
 		mArticleContent = (TextView) root.findViewById(R.id.article_content);
 		new AsyncContentHandler().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		return root;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Activity activity = getActivity();
-		activity.getActionBar().setTitle(mArticle.getCategory().toString());
-		activity.getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(activity, mArticle.getCategory())));
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package se.rgson.da401a.bubblig.gui;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -79,14 +78,6 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		Activity activity = getActivity();
-		activity.getActionBar().setTitle(mCategory.toString());
-		activity.getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(activity, mCategory)));
-	}
-
-	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
@@ -97,7 +88,8 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 		super.onAttach(activity);
 		try {
 			mListener = (ArticleListFragmentListener) activity;
-		} catch (ClassCastException e) {
+		}
+		catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement ArticleListFragmentListener");
 		}
