@@ -1,6 +1,7 @@
 package se.rgson.da401a.bubblig;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -132,10 +133,10 @@ public class MainActivity extends Activity
 	@Override
 	public void onCategorySelected(Category category) {
 		mCategory = category;
+		getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
 		getFragmentManager().beginTransaction()
 				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory), FRAGMENT_ARTICLE_LIST)
-				.addToBackStack(null)
 				.commit();
 		mDrawerLayout.closeDrawers();
 	}
