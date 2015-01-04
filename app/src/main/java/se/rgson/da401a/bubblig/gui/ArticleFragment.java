@@ -2,13 +2,11 @@ package se.rgson.da401a.bubblig.gui;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,14 +34,11 @@ public class ArticleFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.d(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
-			Log.d(TAG, "with savedinstanceState");
 			mArticle = (Article) savedInstanceState.getSerializable(BUNDLE_ARTICLE);
 		}
 		else if (getArguments() != null) {
-			Log.d(TAG, "with Arguments");
 			mArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
 		}
 		else {
@@ -69,7 +64,6 @@ public class ArticleFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		Log.d(TAG, "onSaveInstanceState");
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_ARTICLE, mArticle);
 	}

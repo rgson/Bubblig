@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v13.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -27,12 +26,10 @@ public class ArticleFragmentStatePagerAdapter extends FragmentStatePagerAdapter 
 			throw new IllegalArgumentException("Articles must not be null.");
 		}
 		mArticles = articles;
-		Log.d(TAG, "Constructed");
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-		Log.d(TAG, "getItem " + position);
 		return ArticleFragment.newInstance(mArticles.get(position));
 	}
 
@@ -43,7 +40,6 @@ public class ArticleFragmentStatePagerAdapter extends FragmentStatePagerAdapter 
 
 	@Override
 	public Parcelable saveState() {
-		Log.d(TAG, "saveState");
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(BUNDLE_SUPER, super.saveState());
 		bundle.putSerializable(BUNDLE_ARTICLES, mArticles);
@@ -52,7 +48,6 @@ public class ArticleFragmentStatePagerAdapter extends FragmentStatePagerAdapter 
 
 	@Override
 	public void restoreState(Parcelable state, ClassLoader loader) {
-		Log.d(TAG, "restoreState");
 		Bundle bundle = (Bundle) state;
 		super.restoreState(bundle.getParcelable(BUNDLE_SUPER), loader);
 		mArticles = (ArrayList<Article>) bundle.getSerializable(BUNDLE_ARTICLES);

@@ -5,9 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,15 +45,12 @@ public class ArticlePagerFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.d(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		if (savedInstanceState != null) {
-			Log.d(TAG, "with savedInstanceState");
 			mCategory = (Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY);
 		}
 		else if (getArguments() != null) {
-			Log.d(TAG, "with Arguments");
 			mCategory = (Category) getArguments().getSerializable(BUNDLE_CATEGORY);
 		}
 		else {
@@ -65,7 +60,6 @@ public class ArticlePagerFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.d(TAG, "onCreateView");
 		View root = inflater.inflate(R.layout.fragment_article_pager, container, false);
 
 		mViewPager = (ViewPager) root.findViewById(R.id.article_view_pager);
@@ -113,7 +107,6 @@ public class ArticlePagerFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		Log.d(TAG, "onSaveInstanceState");
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
 		outState.putParcelable(BUNDLE_ADAPTER, mViewPager.getAdapter().saveState());
