@@ -61,15 +61,6 @@ public class Article implements Comparable<Article>, Serializable {
 			throw new IllegalArgumentException("Argument must not be null.");
 		}
 		fetchContent(articleListener);
-		mCategory.prefetchAroundArticle(this);
-	}
-
-	/**
-	 * Fetches the article.
-	 * Does nothing if the article has already been fetched.
-	 */
-	void fetch() {
-		fetchContent(null);
 	}
 
 	private void fetchContent(final ArticleListener articleListener) {

@@ -30,8 +30,6 @@ public enum Category {
 
 	private static final String TAG = Category.class.getSimpleName();
 
-	private static final int PREFETCH_COUNT = 10;
-
 	private ArrayList<Article> mArticles;
 
 	@Override
@@ -62,7 +60,8 @@ public enum Category {
 		}
 		if (mArticles != null) {
 			categoryListener.onCategoryLoaded(mArticles);
-		} else {
+		}
+		else {
 			Bubbla.read(BubblaFeed.valueOf(this.name()), new BubblaListener() {
 				@Override
 				public void onSuccess(List<BubblaArticle> articles) {
@@ -70,7 +69,6 @@ public enum Category {
 					for (BubblaArticle bubblaArticle : articles) {
 						mArticles.add(new Article(bubblaArticle.getID(), HtmlEscape.unescapeHtml(bubblaArticle.getTitle()), bubblaArticle.getURL(), Category.this));
 					}
-					prefetchArticles(0);
 					categoryListener.onCategoryLoaded(mArticles);
 				}
 
@@ -79,38 +77,6 @@ public enum Category {
 					Log.e(TAG, "Failed to fetch articles for " + name());
 				}
 			});
-		}
-	}
-
-	/**
-	 * Checks if more articles should be pre-fetched.
-	 *
-	 * @param article The article that has been requested.
-	 */
-	public void prefetchAroundArticle(Article article) {
-		int articleIndex = mArticles.indexOf(article);
-
-		if (articleIndex == -1) {
-			throw new RuntimeException("The given article is not in this category.");
-		} else {
-			prefetchArticles(articleIndex);
-		}
-	}
-
-	/**
-	 * Pre-fetches the content of articles surrounding the provided position.
-	 *
-	 * @param position The position to center pre-fetching on.
-	 */
-	private void prefetchArticles(int position) {
-		int start = position - PREFETCH_COUNT;
-		start = start < 0 ? 0 : start;
-
-		int end = position + 1 + PREFETCH_COUNT;
-		end = end > mArticles.size() ? mArticles.size() : end;
-
-		for (int i = start; i < end; i++) {
-			mArticles.get(i).fetch();
 		}
 	}
 
