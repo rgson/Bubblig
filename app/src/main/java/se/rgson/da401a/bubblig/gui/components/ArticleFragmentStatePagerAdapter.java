@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.rgson.da401a.bubblig.gui.ArticleFragment;
 import se.rgson.da401a.bubblig.model.Article;
@@ -20,12 +21,12 @@ public class ArticleFragmentStatePagerAdapter extends FragmentStatePagerAdapter 
 
 	private ArrayList<Article> mArticles;
 
-	public ArticleFragmentStatePagerAdapter(FragmentManager fm, ArrayList<Article> articles) {
+	public ArticleFragmentStatePagerAdapter(FragmentManager fm, List<Article> articles) {
 		super(fm);
 		if (articles == null) {
 			throw new IllegalArgumentException("Articles must not be null.");
 		}
-		mArticles = articles;
+		mArticles = new ArrayList<>(articles);
 	}
 
 	@Override

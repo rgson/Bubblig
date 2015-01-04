@@ -2,17 +2,17 @@ package se.rgson.da401a.bubblig.gui.components;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.GuiUtility;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
-import se.rgson.da401a.bubblig.model.CategoryListener;
 
 public class ArticleListAdapter extends ArrayAdapter<Article> {
 
@@ -32,20 +32,7 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 	}
 
 	public void refresh() {
-		if (mListener != null) {
-			mListener.isRefreshing(true);
-		}
-		mCategory.invalidate();
-		mCategory.getArticles(new CategoryListener() {
-			@Override
-			public void onCategoryLoaded(ArrayList<Article> articles) {
-				ArticleListAdapter.this.clear();
-				ArticleListAdapter.this.addAll(articles);
-				if (mListener != null) {
-					mListener.isRefreshing(false);
-				}
-			}
-		});
+		new AsyncRefreshHandler().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	//Sets the row color in Article ListView depending on the category!
@@ -66,5 +53,31 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 
 	public interface ArticleListAdapterListener {
 		void isRefreshing(boolean refreshing);
+	}
+
+	private class AsyncRefreshHandler extends AsyncTask<Void, Void, List<Article>> {
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if (mListener != null) {
+				mListener.isRefreshing(true);
+			}
+		}
+
+		@Override
+		protected List<Article> doInBackground(Void... params) {
+			mCategory.invalidate();
+			return mCategory.getArticles();
+		}
+
+		@Override
+		protected void onPostExecute(List<Article> articles) {
+			super.onPostExecute(articles);
+			ArticleListAdapter.this.clear();
+			ArticleListAdapter.this.addAll(articles);
+			if (mListener != null) {
+				mListener.isRefreshing(false);
+			}
+		}
 	}
 }

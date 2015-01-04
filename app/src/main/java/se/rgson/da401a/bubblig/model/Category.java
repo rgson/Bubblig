@@ -5,6 +5,7 @@ import android.util.Log;
 import org.unbescape.html.HtmlEscape;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import se.rgson.da401a.bubblig.model.bubbla.Bubbla;
@@ -30,7 +31,7 @@ public enum Category {
 
 	private static final String TAG = Category.class.getSimpleName();
 
-	private ArrayList<Article> mArticles;
+	private List<Article> mArticles;
 
 	@Override
 	public String toString() {
@@ -52,31 +53,25 @@ public enum Category {
 	/**
 	 * Gets the articles in this category.
 	 *
-	 * @param categoryListener The listener to receive a callback upon completion.
+	 * @return An unmodifiable list of articles.
 	 */
-	public void getArticles(final CategoryListener categoryListener) {
-		if (categoryListener == null) {
-			throw new IllegalArgumentException("Argument must not be null.");
-		}
+	public List<Article> getArticles() {
 		if (mArticles != null) {
-			categoryListener.onCategoryLoaded(mArticles);
+			return mArticles;
 		}
 		else {
-			Bubbla.read(BubblaFeed.valueOf(this.name()), new BubblaListener() {
-				@Override
-				public void onSuccess(List<BubblaArticle> articles) {
-					mArticles = new ArrayList<>(articles.size());
-					for (BubblaArticle bubblaArticle : articles) {
-						mArticles.add(new Article(bubblaArticle.getID(), HtmlEscape.unescapeHtml(bubblaArticle.getTitle()), bubblaArticle.getURL(), Category.this));
-					}
-					categoryListener.onCategoryLoaded(mArticles);
+			List<BubblaArticle> bubblaArticles = Bubbla.read(BubblaFeed.valueOf(this.name()));
+			if (bubblaArticles != null) {
+				mArticles = new ArrayList<>(bubblaArticles.size());
+				for (BubblaArticle bubblaArticle : bubblaArticles) {
+					mArticles.add(new Article(bubblaArticle.getID(), HtmlEscape.unescapeHtml(bubblaArticle.getTitle()), bubblaArticle.getURL(), Category.this));
 				}
-
-				@Override
-				public void onError() {
-					Log.e(TAG, "Failed to fetch articles for " + name());
-				}
-			});
+				mArticles = Collections.unmodifiableList(mArticles);
+			}
+			else {
+				Log.e(TAG, "Failed to fetch articles for " + name());
+			}
+			return mArticles;
 		}
 	}
 

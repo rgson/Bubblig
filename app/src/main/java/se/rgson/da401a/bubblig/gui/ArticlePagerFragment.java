@@ -14,12 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.components.ArticleFragmentStatePagerAdapter;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
-import se.rgson.da401a.bubblig.model.CategoryListener;
 
 public class ArticlePagerFragment extends Fragment {
 
@@ -72,15 +72,11 @@ public class ArticlePagerFragment extends Fragment {
 			mViewPager.setCurrentItem(savedInstanceState.getInt(BUNDLE_CURRENT), false);
 		}
 		else {
-			mCategory.getArticles(new CategoryListener() {
-				@Override
-				public void onCategoryLoaded(ArrayList<Article> articles) {
-					mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), articles);
-					mViewPager.setAdapter(mAdapter);
-					Article currentArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
-					mViewPager.setCurrentItem(articles.indexOf(currentArticle));
-				}
-			});
+			List<Article> articles = mCategory.getArticles();
+			mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), articles);
+			mViewPager.setAdapter(mAdapter);
+			Article currentArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
+			mViewPager.setCurrentItem(articles.indexOf(currentArticle));
 		}
 
 		mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -136,7 +132,8 @@ public class ArticlePagerFragment extends Fragment {
 		super.onAttach(activity);
 		try {
 			mListener = (ArticlePagerFragmentListener) activity;
-		} catch (ClassCastException e) {
+		}
+		catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement ArticlePagerFragmentListener");
 		}

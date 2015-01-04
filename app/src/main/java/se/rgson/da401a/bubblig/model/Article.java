@@ -1,11 +1,12 @@
 package se.rgson.da401a.bubblig.model;
 
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 
 import java.io.Serializable;
 
 import se.rgson.da401a.bubblig.model.readability.Readability;
-import se.rgson.da401a.bubblig.model.readability.ReadabilityListener;
 import se.rgson.da401a.bubblig.model.readability.ReadabilityResponse;
 
 public class Article implements Comparable<Article>, Serializable {
@@ -54,41 +55,21 @@ public class Article implements Comparable<Article>, Serializable {
 	/**
 	 * Gets the content of the article.
 	 *
-	 * @param articleListener
+	 * @return The content of the article in HTML, or null if fetching failed.
 	 */
-	public void getContent(final ArticleListener articleListener) {
-		if (articleListener == null) {
-			throw new IllegalArgumentException("Argument must not be null.");
-		}
-		fetchContent(articleListener);
-	}
-
-	private void fetchContent(final ArticleListener articleListener) {
+	public String getContent() {
 		if (mContent != null) {
-			if (articleListener != null) {
-				articleListener.onArticleLoaded(mContent);
-			}
+			return mContent;
 		}
 		else {
-			Readability.parse(getURL(), new ReadabilityListener() {
-				@Override
-				public void onSuccess(ReadabilityResponse response) {
-					mContent = "<h1>" + response.getTitle() + "</h1>" + response.getContent();
-					if (articleListener != null) {
-						articleListener.onArticleLoaded(mContent);
-					}
-				}
-
-				@Override
-				public void onError() {
-					Log.e(TAG, "Failed to fetch content for article " + mID);
-					mContent = "";
-					if (articleListener != null) {
-						articleListener.onArticleLoaded(mContent);
-					}
-				}
-			});
+			ReadabilityResponse response = Readability.parse(getURL());
+			if (response != null) {
+				mContent = "<h1>" + response.getTitle() + "</h1>" + response.getContent();
+			}
+			else {
+				Log.e(TAG, "Failed to fetch content for article " + mID);
+			}
+			return mContent;
 		}
 	}
-
 }

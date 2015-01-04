@@ -6,8 +6,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.model.Article;
-import se.rgson.da401a.bubblig.model.ArticleListener;
 
 public class ArticleFragment extends Fragment {
 
@@ -72,26 +71,16 @@ public class ArticleFragment extends Fragment {
 	private class AsyncContentHandler extends AsyncTask<Void, Void, Spanned> {
 		@Override
 		protected Spanned doInBackground(Void... params) {
-			final Spanned[] spanned = new Spanned[1];
-			mArticle.getContent(new ArticleListener() {
-				@Override
-				public void onArticleLoaded(String content) {
-					if (content.isEmpty()) {
-						content = getResources().getString(R.string.article_loading_failed);
-					}
-					spanned[0] = Html.fromHtml(content);
-				}
-			});
-			while (spanned[0] == null) {
-				// Hack to avoid race condition.
-				// TODO Rework model to avoid this.
+			Spanned content = Html.fromHtml(mArticle.getContent());
+			if (content == null) {
+				content = new SpannableString(getResources().getString(R.string.article_loading_failed));
 			}
-			return spanned[0];
+			return content;
 		}
 
 		@Override
 		protected void onPostExecute(Spanned result) {
-			//TODO Huge time sink! Process in parts while scrolling, using append().
+			//TODO Dangerous time sink for long articles. Process in parts while scrolling, using append().
 			mArticleContent.setText(result);
 		}
 	}
