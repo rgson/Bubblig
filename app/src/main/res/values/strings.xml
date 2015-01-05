@@ -7,7 +7,7 @@
 	<string name="action_about">About</string>
 	<string name="about_title">About Bubblig</string>
 	<string name="about_text">
-		<![CDATA[<b>Bubblig</b> is an unofficial news reader app for <a href="http://bubb.la/">Bubb.la</a>, a Swedish news collection site.]]>
+		<![CDATA[<b>Bubblig</b> is an unofficial news reader app for <a href="http://bubb.la/">Bubb.la</a>, a Swedish news collection site. <br/>Bubblig uses the Bubb.la RSS-feed in combination with <a href="https://readability.com/">Readability</a> in order to read the articles.]]>
 	</string>
 	<string name="about_disclaimer">Created by Johan Fredriksson and Robin Gustafsson.\nBubblig is not affiliated with Bubb.la.</string>
 	<string name="article_loading_failed">

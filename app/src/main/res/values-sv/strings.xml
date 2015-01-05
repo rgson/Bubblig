@@ -6,7 +6,7 @@
 	<string name="action_about">Om</string>
 	<string name="about_title">Om Bubblig</string>
 	<string name="about_text">
-		<![CDATA[<b>Bubblig</b> är en <u>inofficiell</u> nyhetsläsare för <a href="http://bubb.la/">Bubb.la</a>, en svensk samlingssida för nyhetsartiklar.]]>
+		<![CDATA[<b>Bubblig</b> är en inofficiell nyhetsläsare för <a href="http://bubb.la/">Bubb.la</a>, en svensk samlingssida för nyhetsartiklar. <br/>Bubblig använder sig av Bubb.las RSS-feed i kombination med <a href="https://readability.com/">Readability</a> för inläsning av nyheter.]]>
 	</string>
 	<string name="about_disclaimer">Skapad av Johan Fredriksson och Robin Gustafsson.\nBubblig är inte kopplat till Bubb.la.</string>
 	<string name="article_loading_failed">
