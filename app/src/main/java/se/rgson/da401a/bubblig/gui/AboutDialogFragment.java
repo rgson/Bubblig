@@ -4,11 +4,13 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import se.rgson.da401a.bubblig.Preferences;
 import se.rgson.da401a.bubblig.R;
 
 public class AboutDialogFragment extends DialogFragment {
@@ -35,6 +37,7 @@ public class AboutDialogFragment extends DialogFragment {
 		TextView text = (TextView) root.findViewById(R.id.about_text);
 		text.setText(Html.fromHtml(getResources().getString(R.string.about_text)));
 		text.setMovementMethod(LinkMovementMethod.getInstance());
+		text.setTextSize(TypedValue.COMPLEX_UNIT_SP, Preferences.getTextSize());
 
 		return root;
 	}
