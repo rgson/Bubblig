@@ -2,6 +2,7 @@ package se.rgson.da401a.bubblig.gui;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -31,13 +32,18 @@ public class AboutDialogFragment extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.fragment_dialog_about, container, false);
 
+		float textSize = Preferences.getTextSize();
+
 		TextView title = (TextView) root.findViewById(R.id.about_title);
-		title.setText(R.string.about_title);
+		title.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize * GuiUtility.TEXT_SCALE_TITLE);
 
 		TextView text = (TextView) root.findViewById(R.id.about_text);
 		text.setText(Html.fromHtml(getResources().getString(R.string.about_text)));
 		text.setMovementMethod(LinkMovementMethod.getInstance());
 		text.setTextSize(TypedValue.COMPLEX_UNIT_SP, Preferences.getTextSize());
+
+		TextView detail = (TextView) root.findViewById(R.id.about_detail);
+		detail.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize * GuiUtility.TEXT_SCALE_DETAIL);
 
 		return root;
 	}

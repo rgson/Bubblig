@@ -9,6 +9,9 @@ import se.rgson.da401a.bubblig.model.Category;
 
 public class GuiUtility {
 
+	public static final float TEXT_SCALE_TITLE = 1.2f;
+	public static final float TEXT_SCALE_DETAIL = 0.8f;
+
 	private GuiUtility() {
 	}
 

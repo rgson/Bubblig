@@ -39,7 +39,7 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.text.setText(getItem(position).toString());
-		holder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, Preferences.getTextSize());
+		holder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, Preferences.getTextSize() * GuiUtility.TEXT_SCALE_TITLE);
 		holder.color.setColor(GuiUtility.findColorFor(getContext(), getItem(position)));
 		return convertView;
 	}

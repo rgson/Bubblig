@@ -10,6 +10,7 @@
 
 	<TextView
 		android:id="@+id/about_title"
+		android:text="@string/about_title"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:layout_alignParentTop="true"
@@ -23,6 +24,7 @@
 		android:layout_width="match_parent"
 		android:layout_below="@id/about_title"
 		android:layout_marginBottom="@dimen/about_margin"
+		android:textColorLink="@color/links"
 		style="@style/TextView"/>
 
 	<ImageView
@@ -35,6 +37,7 @@
 		android:layout_marginBottom="@dimen/about_margin"/>
 
 	<TextView
+		android:id="@+id/about_detail"
 		android:text="@string/about_disclaimer"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

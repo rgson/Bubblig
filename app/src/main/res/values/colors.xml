@@ -3,6 +3,8 @@
 
 	<color name="whitesmoke">#f5f5f5</color>
 	<color name="detail">#636265</color>
+	<color name="links">#337ab7</color>
+
 	<color name="category_nyheter">#1E745C</color>
 	<color name="category_världen">#CC6F00</color>
 	<color name="category_sverige">#CCCC00</color>
