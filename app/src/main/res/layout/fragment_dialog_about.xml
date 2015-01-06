@@ -3,7 +3,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context="se.rgson.da401a.bubblig.gui.AboutFragment"
+	tools:context="se.rgson.da401a.bubblig.gui.AboutDialogFragment"
 	android:id="@+id/container_about"
 	android:orientation="vertical"
 	android:padding="@dimen/about_padding">

@@ -12,11 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import se.rgson.da401a.bubblig.gui.AboutFragment;
+import se.rgson.da401a.bubblig.gui.AboutDialogFragment;
 import se.rgson.da401a.bubblig.gui.ArticleListFragment;
 import se.rgson.da401a.bubblig.gui.ArticlePagerFragment;
 import se.rgson.da401a.bubblig.gui.CategoryListFragment;
 import se.rgson.da401a.bubblig.gui.GuiUtility;
+import se.rgson.da401a.bubblig.gui.SettingsDialogFragment;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
 
@@ -31,7 +32,8 @@ public class MainActivity extends Activity
 	private static String FRAGMENT_CATEGORY_LIST = "FRAGMENT_CATEGORY_LIST";
 	private static String FRAGMENT_ARTICLE_LIST = "FRAGMENT_ARTICLE_LIST";
 	private static String FRAGMENT_ARTICLE_PAGER = "FRAGMENT_ARTICLE_PAGER";
-	private static String FRAGMENT_ABOUT = "FRAGMENT_ABOUT";
+	private static String FRAGMENT_DIALOG_ABOUT = "FRAGMENT_DIALOG_ABOUT";
+	private static String FRAGMENT_DIALOG_SETTINGS = "FRAGMENT_DIALOG_SETTINGS";
 
 	private boolean mTabletLayout = false;
 	private float mDrawerOffset = 0.0f;
@@ -42,6 +44,7 @@ public class MainActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Preferences.init(this);
 		setContentView(R.layout.activity_main);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -118,7 +121,7 @@ public class MainActivity extends Activity
 		int alpha = (int) (255 * (1 - mDrawerOffset));
 		for (int i = 0; i < menu.size(); i++) {
 			MenuItem item = menu.getItem(i);
-			if (item.getItemId() == R.id.action_about) {
+			if (item.getItemId() == R.id.action_about || item.getItemId() == R.id.action_settings) {
 				continue;
 			}
 			if (item.getIcon() != null) {
@@ -138,6 +141,10 @@ public class MainActivity extends Activity
 		switch (item.getItemId()) {
 			case R.id.action_about:
 				showAbout();
+				return true;
+
+			case R.id.action_settings:
+				showSettings();
 				return true;
 
 			default:
@@ -174,11 +181,16 @@ public class MainActivity extends Activity
 	}
 
 	private void showAbout() {
-		AboutFragment.newInstance().show(getFragmentManager(), FRAGMENT_ABOUT);
+		AboutDialogFragment.newInstance().show(getFragmentManager(), FRAGMENT_DIALOG_ABOUT);
+	}
+
+	private void showSettings() {
+		SettingsDialogFragment.newInstance().show(getFragmentManager(), FRAGMENT_DIALOG_SETTINGS);
 	}
 
 	private void updateActionbar() {
 		getActionBar().setTitle(mCategory.toString());
 		getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(this, mCategory)));
 	}
+
 }

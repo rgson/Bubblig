@@ -3,8 +3,15 @@
     <item
         android:id="@+id/action_about"
         android:title="About"
-        android:orderInCategory="3"
-        android:showAsAction="always"
+        android:orderInCategory="10"
+        android:showAsAction="never"
         android:icon="@drawable/ic_action_about" />
+
+	<item
+		android:id="@+id/action_settings"
+		android:title="@string/action_settings"
+		android:orderInCategory="111"
+		android:showAsAction="never"
+		android:icon="@drawable/ic_action_settings" />
 
 </menu>

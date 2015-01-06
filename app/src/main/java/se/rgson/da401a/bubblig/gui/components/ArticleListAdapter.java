@@ -3,12 +3,15 @@ package se.rgson.da401a.bubblig.gui.components;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.List;
 
+import se.rgson.da401a.bubblig.Preferences;
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.GuiUtility;
 import se.rgson.da401a.bubblig.model.Article;
@@ -39,6 +42,9 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = super.getView(position, convertView, parent);
+
+		TextView textView = (TextView) view.findViewById(android.R.id.text1);
+		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, Preferences.getTextSize());
 
 		Resources res = parent.getResources();
 		if (position % 2 == 0) {

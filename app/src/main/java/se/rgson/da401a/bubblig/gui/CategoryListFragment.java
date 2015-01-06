@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import se.rgson.da401a.bubblig.Preferences;
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.components.CategoryListAdapter;
 import se.rgson.da401a.bubblig.model.Category;
@@ -20,9 +21,24 @@ public class CategoryListFragment extends Fragment {
 
 	private CategoryListFragmentListener mListener;
 	private ListView mCategoryList;
+	private Preferences.PreferenceListener mPreferenceListener;
 
 	public static CategoryListFragment newInstance() {
 		return new CategoryListFragment();
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mPreferenceListener = new Preferences.PreferenceListener() {
+			@Override
+			public void onTextSizePreferenceChanged(float textSize) {
+				if (mCategoryList != null) {
+					((CategoryListAdapter)mCategoryList.getAdapter()).notifyDataSetChanged();
+				}
+			}
+		};
+		Preferences.attachPreferenceListener(mPreferenceListener);
 	}
 
 	@Override
@@ -53,6 +69,12 @@ public class CategoryListFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(BUNDLE_SELECTED, mCategoryList.getSelectedItemPosition());
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Preferences.detachPreferenceListener(mPreferenceListener);
 	}
 
 	@Override

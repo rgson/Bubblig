@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import se.rgson.da401a.bubblig.Preferences;
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.components.ArticleListAdapter;
 import se.rgson.da401a.bubblig.model.Article;
@@ -24,6 +26,7 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private ListView mArticleList;
 	private Category mCategory;
+	private Preferences.PreferenceListener mPreferenceListener;
 
 	public static ArticleListFragment newInstance(Category category) {
 		ArticleListFragment fragment = new ArticleListFragment();
@@ -45,6 +48,15 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 		else {
 			throw new IllegalArgumentException("A category must be provided.");
 		}
+		mPreferenceListener = new Preferences.PreferenceListener() {
+			@Override
+			public void onTextSizePreferenceChanged(float textSize) {
+				if (mArticleList != null) {
+					((ArticleListAdapter)mArticleList.getAdapter()).notifyDataSetChanged();
+				}
+			}
+		};
+		Preferences.attachPreferenceListener(mPreferenceListener);
 	}
 
 	@Override
@@ -81,6 +93,12 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Preferences.detachPreferenceListener(mPreferenceListener);
 	}
 
 	@Override

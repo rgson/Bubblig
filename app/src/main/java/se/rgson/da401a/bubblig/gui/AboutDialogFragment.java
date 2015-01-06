@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import se.rgson.da401a.bubblig.R;
 
-public class AboutFragment extends DialogFragment {
+public class AboutDialogFragment extends DialogFragment {
 
-	private static final String TAG = AboutFragment.class.getSimpleName();
+	private static final String TAG = AboutDialogFragment.class.getSimpleName();
 
-	public static AboutFragment newInstance() {
-		return new AboutFragment();
+	public static AboutDialogFragment newInstance() {
+		return new AboutDialogFragment();
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class AboutFragment extends DialogFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View root = inflater.inflate(R.layout.fragment_about, container, false);
+		View root = inflater.inflate(R.layout.fragment_dialog_about, container, false);
 
 		TextView title = (TextView) root.findViewById(R.id.about_title);
 		title.setText(R.string.about_title);

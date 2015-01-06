@@ -2,12 +2,14 @@ package se.rgson.da401a.bubblig.gui.components;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import se.rgson.da401a.bubblig.Preferences;
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.GuiUtility;
 import se.rgson.da401a.bubblig.model.Category;
@@ -37,6 +39,7 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.text.setText(getItem(position).toString());
+		holder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, Preferences.getTextSize());
 		holder.color.setColor(GuiUtility.findColorFor(getContext(), getItem(position)));
 		return convertView;
 	}
