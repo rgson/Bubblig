@@ -80,11 +80,11 @@ public class ArticleFragment extends Fragment {
 	private class AsyncContentHandler extends AsyncTask<Void, Void, Spanned> {
 		@Override
 		protected Spanned doInBackground(Void... params) {
-			Spanned content = Html.fromHtml(mArticle.getContent());
-			if (content == null) {
-				content = new SpannableString(getResources().getString(R.string.article_loading_failed));
+			String rawContent = mArticle.getContent();
+			if (rawContent == null) {
+				rawContent = getResources().getString(R.string.article_loading_failed);
 			}
-			return content;
+			return Html.fromHtml(rawContent);
 		}
 
 		@Override
