@@ -14,25 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.components.ArticleFragmentStatePagerAdapter;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
-import se.rgson.da401a.bubblig.model.CategoryListener;
-
 
 public class ArticlePagerFragment extends Fragment {
 
 	private static final String TAG = ArticlePagerFragment.class.getSimpleName();
 	private static final String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
 	private static final String BUNDLE_ARTICLE = "BUNDLE_ARTICLE";
+	private static final String BUNDLE_CURRENT = "BUNDLE_CURRENT";
+	private static final String BUNDLE_ADAPTER = "BUNDLE_ADAPTER";
 
 	private ArticlePagerFragmentListener mListener;
 	private ViewPager mViewPager;
 	private ArticleFragmentStatePagerAdapter mAdapter;
 	private Category mCategory;
-	private ArrayList<Article> mArticles;
 
 	public static ArticlePagerFragment newInstance(Category category, Article article) {
 		ArticlePagerFragment fragment = new ArticlePagerFragment();
@@ -53,6 +53,9 @@ public class ArticlePagerFragment extends Fragment {
 		else if (getArguments() != null) {
 			mCategory = (Category) getArguments().getSerializable(BUNDLE_CATEGORY);
 		}
+		else {
+			throw new IllegalArgumentException("A category must be provided.");
+		}
 	}
 
 	@Override
@@ -60,21 +63,20 @@ public class ArticlePagerFragment extends Fragment {
 		View root = inflater.inflate(R.layout.fragment_article_pager, container, false);
 
 		mViewPager = (ViewPager) root.findViewById(R.id.article_view_pager);
-		mViewPager.setOffscreenPageLimit(2);
+		//mViewPager.setOffscreenPageLimit(2);
 
-		if (mCategory != null) {
-			mCategory.getArticles(new CategoryListener() {
-				@Override
-				public void onCategoryLoaded(ArrayList<Article> articles) {
-					mArticles = articles;
-					mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), mArticles);
-					mViewPager.setAdapter(mAdapter);
-					if (getArguments() != null) {
-						Article currentArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
-						mViewPager.setCurrentItem(articles.indexOf(currentArticle));
-					}
-				}
-			});
+		if (savedInstanceState != null) {
+			mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), new ArrayList<Article>());
+			mAdapter.restoreState(savedInstanceState.getParcelable(BUNDLE_ADAPTER), getActivity().getClassLoader());
+			mViewPager.setAdapter(mAdapter);
+			mViewPager.setCurrentItem(savedInstanceState.getInt(BUNDLE_CURRENT), false);
+		}
+		else {
+			List<Article> articles = mCategory.getArticles();
+			mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), articles);
+			mViewPager.setAdapter(mAdapter);
+			Article currentArticle = (Article) getArguments().getSerializable(BUNDLE_ARTICLE);
+			mViewPager.setCurrentItem(articles.indexOf(currentArticle));
 		}
 
 		mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -86,7 +88,7 @@ public class ArticlePagerFragment extends Fragment {
 			@Override
 			public void onPageSelected(int position) {
 				if (mListener != null) {
-					mListener.onDisplayedArticleChanged(mArticles.get(position));
+					mListener.onDisplayedArticleChanged(mAdapter.getArticle(position));
 				}
 			}
 
@@ -103,9 +105,8 @@ public class ArticlePagerFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
-		if (mViewPager.getCurrentItem() != -1) {
-			outState.putSerializable(BUNDLE_ARTICLE, mArticles.get(mViewPager.getCurrentItem()));
-		}
+		outState.putParcelable(BUNDLE_ADAPTER, mViewPager.getAdapter().saveState());
+		outState.putInt(BUNDLE_CURRENT, mViewPager.getCurrentItem());
 	}
 
 	@Override
@@ -131,7 +132,8 @@ public class ArticlePagerFragment extends Fragment {
 		super.onAttach(activity);
 		try {
 			mListener = (ArticlePagerFragmentListener) activity;
-		} catch (ClassCastException e) {
+		}
+		catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement ArticlePagerFragmentListener");
 		}
@@ -149,7 +151,7 @@ public class ArticlePagerFragment extends Fragment {
 
 	private boolean openArticle() {
 		if (mViewPager.getCurrentItem() != -1) {
-			Article currentArticle = mArticles.get(mViewPager.getCurrentItem());
+			Article currentArticle = mAdapter.getArticle(mViewPager.getCurrentItem());
 			Intent intent = new Intent(Intent.ACTION_VIEW)
 					.setData(Uri.parse(currentArticle.getURL()));
 			startActivity(intent);
@@ -160,7 +162,7 @@ public class ArticlePagerFragment extends Fragment {
 
 	private boolean shareArticle() {
 		if (mViewPager.getCurrentItem() != -1) {
-			Article currentArticle = mArticles.get(mViewPager.getCurrentItem());
+			Article currentArticle = mAdapter.getArticle(mViewPager.getCurrentItem());
 			Intent intent = new Intent(Intent.ACTION_SEND)
 					.setType("text/plain")
 					.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.action_article_share))

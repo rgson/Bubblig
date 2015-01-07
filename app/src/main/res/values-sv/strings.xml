@@ -3,5 +3,22 @@
 
 	<string name="action_article_share">Dela artikel</string>
 	<string name="action_article_open">Öppna i webbläsaren</string>
+	<string name="action_about">Om</string>
+	<string name="action_settings">Inställningar</string>
+
+	<string name="about_title">Om Bubblig</string>
+	<string name="about_text">
+		<![CDATA[<b>Bubblig</b> är en inofficiell nyhetsläsare för <a href="http://bubb.la/">Bubb.la</a>, en svensk samlingssida för nyhetsartiklar. <br/>Bubblig använder sig av Bubb.las RSS-feed i kombination med <a href="https://readability.com/">Readability</a> för inläsning av nyheter.]]>
+	</string>
+	<string name="about_disclaimer">Skapad av Johan Fredriksson och Robin Gustafsson.\nBubblig är inte kopplat till Bubb.la.</string>
+
+	<string name="settings_title">Inställningar</string>
+	<string name="settings_button_positive">Spara</string>
+	<string name="settings_button_negative">Avbryt</string>
+	<string name="settings_textsize">Textstorlek</string>
+
+	<string name="article_loading_failed">
+		<![CDATA[<h1>Hämtningen av artikelns innehåll misslyckades.</h1><p>Du kan istället besöka artikelns källa direkt via menyknappen.</p>]]>
+	</string>
 
 </resources>

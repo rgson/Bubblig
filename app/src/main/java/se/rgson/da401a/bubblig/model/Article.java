@@ -1,14 +1,12 @@
 package se.rgson.da401a.bubblig.model;
 
 import android.text.Html;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
 
 import java.io.Serializable;
 
 import se.rgson.da401a.bubblig.model.readability.Readability;
-import se.rgson.da401a.bubblig.model.readability.ReadabilityListener;
 import se.rgson.da401a.bubblig.model.readability.ReadabilityResponse;
 
 public class Article implements Comparable<Article>, Serializable {
@@ -57,54 +55,21 @@ public class Article implements Comparable<Article>, Serializable {
 	/**
 	 * Gets the content of the article.
 	 *
-	 * @param articleListener
+	 * @return The content of the article in HTML, or null if fetching failed.
 	 */
-	public void getContent(final ArticleListener articleListener) {
-		if (articleListener == null) {
-			throw new IllegalArgumentException("Argument must not be null.");
-		}
+	public String getContent() {
 		if (mContent != null) {
-			articleListener.onArticleLoaded(mContent);
-		} else {
-			Readability.parse(getURL(), new ReadabilityListener() {
-				@Override
-				public void onSuccess(ReadabilityResponse response) {
-					mContent = prepareContent(response);
-					articleListener.onArticleLoaded(mContent);
-				}
-
-				@Override
-				public void onError() {
-					Log.e(TAG, "Failed to fetch content for article " + mID);
-				}
-			});
+			return mContent;
 		}
-		mCategory.prefetchAroundArticle(this);
-	}
-
-	/**
-	 * Fetches the article.
-	 * Does nothing if the article has already been fetched.
-	 */
-	void fetch() {
-		if (mContent == null) {
-			Readability.parse(mURL, new ReadabilityListener() {
-				@Override
-				public void onSuccess(ReadabilityResponse response) {
-					mContent = prepareContent(response);
-				}
-
-				@Override
-				public void onError() {
-					Log.e(TAG, "Failed to fetch content for article " + mID);
-					mContent = "<h1>Failed to fetch content for article.</h1><p>Please visit the original source by pressing the icon on the action bar.</p>";
-				}
-			});
+		else {
+			ReadabilityResponse response = Readability.parse(getURL());
+			if (response != null) {
+				mContent = "<h1>" + response.getTitle() + "</h1>" + response.getContent();
+			}
+			else {
+				Log.e(TAG, "Failed to fetch content for article " + mID);
+			}
+			return mContent;
 		}
-	}
-
-	private String prepareContent(ReadabilityResponse response) {
-		return ("<h1>" + response.getTitle() + "</h1>" + response.getContent())
-				.replaceAll("<img.+?>", "");
 	}
 }

@@ -12,7 +12,8 @@
 		<ListView
 			android:id="@+id/article_list"
 			android:layout_height="match_parent"
-			android:layout_width="match_parent"/>
+			android:layout_width="match_parent"
+			android:background="@color/row_lst_item_even"/>
 
 	</android.support.v4.widget.SwipeRefreshLayout>
 

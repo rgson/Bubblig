@@ -2,45 +2,49 @@ package se.rgson.da401a.bubblig;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.res.Configuration;
-import android.net.Uri;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
+import se.rgson.da401a.bubblig.gui.AboutDialogFragment;
 import se.rgson.da401a.bubblig.gui.ArticleListFragment;
 import se.rgson.da401a.bubblig.gui.ArticlePagerFragment;
 import se.rgson.da401a.bubblig.gui.CategoryListFragment;
-import se.rgson.da401a.bubblig.gui.components.AboutFragment;
+import se.rgson.da401a.bubblig.gui.GuiUtility;
+import se.rgson.da401a.bubblig.gui.SettingsDialogFragment;
 import se.rgson.da401a.bubblig.model.Article;
 import se.rgson.da401a.bubblig.model.Category;
 
 
-public class MainActivity extends Activity implements
-		CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener,
-		ArticlePagerFragment.ArticlePagerFragmentListener, AboutFragment.AboutFragmentListener {
+public class MainActivity extends Activity
+		implements CategoryListFragment.CategoryListFragmentListener, ArticleListFragment.ArticleListFragmentListener, ArticlePagerFragment.ArticlePagerFragmentListener {
 
 	private static String TAG = MainActivity.class.getSimpleName();
 
-	private Button gotoAbout;
+	private static String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
+
+	private static String FRAGMENT_CATEGORY_LIST = "FRAGMENT_CATEGORY_LIST";
+	private static String FRAGMENT_ARTICLE_LIST = "FRAGMENT_ARTICLE_LIST";
+	private static String FRAGMENT_ARTICLE_PAGER = "FRAGMENT_ARTICLE_PAGER";
+	private static String FRAGMENT_DIALOG_ABOUT = "FRAGMENT_DIALOG_ABOUT";
+	private static String FRAGMENT_DIALOG_SETTINGS = "FRAGMENT_DIALOG_SETTINGS";
 
 	private boolean mTabletLayout = false;
 	private float mDrawerOffset = 0.0f;
 	private Category mCategory;
-
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Preferences.init(this);
 		setContentView(R.layout.activity_main);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -49,15 +53,20 @@ public class MainActivity extends Activity implements
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-
 		mTabletLayout = (findViewById(R.id.article_container) != null);
-		mCategory = Category.NYHETER;
+
+		if (savedInstanceState != null) {
+			mCategory = (Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY);
+		}
+		else {
+			mCategory = Category.NYHETER;
+		}
 
 		if (savedInstanceState == null) {
 			int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
 			getFragmentManager().beginTransaction()
-					.add(R.id.drawer_container, CategoryListFragment.newInstance())
-					.add(articleListContainerID, ArticleListFragment.newInstance(mCategory))
+					.add(R.id.drawer_container, CategoryListFragment.newInstance(), FRAGMENT_CATEGORY_LIST)
+					.add(articleListContainerID, ArticleListFragment.newInstance(mCategory), FRAGMENT_ARTICLE_LIST)
 					.commit();
 		}
 
@@ -86,6 +95,13 @@ public class MainActivity extends Activity implements
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		mDrawerToggle.syncState();
+		updateActionbar();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
 	}
 
 	@Override
@@ -95,10 +111,19 @@ public class MainActivity extends Activity implements
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		int alpha = (int) (255 * (1 - mDrawerOffset));
 		for (int i = 0; i < menu.size(); i++) {
 			MenuItem item = menu.getItem(i);
+			if (item.getItemId() == R.id.action_about || item.getItemId() == R.id.action_settings) {
+				continue;
+			}
 			if (item.getIcon() != null) {
 				item.getIcon().setAlpha(alpha);
 			}
@@ -115,12 +140,12 @@ public class MainActivity extends Activity implements
 
 		switch (item.getItemId()) {
 			case R.id.action_about:
-				AboutFragment fragment = AboutFragment.newInstance("", "");
-				FragmentManager fM = getFragmentManager();
-				FragmentTransaction fT = fM.beginTransaction();
-				fT.replace(R.id.container, fragment, null);
-				fT.addToBackStack("about back");
-				fT.commit();
+				showAbout();
+				return true;
+
+			case R.id.action_settings:
+				showSettings();
+				return true;
 
 			default:
 				return super.onOptionsItemSelected(item);
@@ -130,40 +155,42 @@ public class MainActivity extends Activity implements
 	@Override
 	public void onCategorySelected(Category category) {
 		mCategory = category;
+		getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		int articleListContainerID = mTabletLayout ? R.id.list_container : R.id.container;
 		getFragmentManager().beginTransaction()
-				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory))
+				.replace(articleListContainerID, ArticleListFragment.newInstance(mCategory), FRAGMENT_ARTICLE_LIST)
 				.commit();
-		setTitle(mCategory.toString());
 		mDrawerLayout.closeDrawers();
+		updateActionbar();
 	}
 
 	@Override
 	public void onArticleSelected(Article article) {
 		int articlePagerContainerID = mTabletLayout ? R.id.article_container : R.id.container;
 		getFragmentManager().beginTransaction()
-				.replace(articlePagerContainerID, ArticlePagerFragment.newInstance(mCategory, article))
+				.replace(articlePagerContainerID, ArticlePagerFragment.newInstance(mCategory, article), FRAGMENT_ARTICLE_PAGER)
+				.addToBackStack(null)
 				.commit();
 	}
 
 	@Override
 	public void onDisplayedArticleChanged(Article article) {
 		if (mTabletLayout) {
-			// Update ListView to match displayed article.
+			//TODO Update ListView to match displayed article.
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//Inflates the actionbar
-		MenuInflater mif = getMenuInflater();
-		mif.inflate(R.menu.menu_main, menu);
-		return super.onCreateOptionsMenu(menu);
+	private void showAbout() {
+		AboutDialogFragment.newInstance().show(getFragmentManager(), FRAGMENT_DIALOG_ABOUT);
 	}
 
-	@Override
-	public void onFragmentInteraction(Uri uri) {
-
+	private void showSettings() {
+		SettingsDialogFragment.newInstance().show(getFragmentManager(), FRAGMENT_DIALOG_SETTINGS);
 	}
+
+	private void updateActionbar() {
+		getActionBar().setTitle(mCategory.toString());
+		getActionBar().setBackgroundDrawable(new ColorDrawable(GuiUtility.findColorFor(this, mCategory)));
+	}
+
 }

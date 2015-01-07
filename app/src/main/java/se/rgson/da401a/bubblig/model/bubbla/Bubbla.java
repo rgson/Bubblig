@@ -1,6 +1,5 @@
 package se.rgson.da401a.bubblig.model.bubbla;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import org.simpleframework.xml.Serializer;
@@ -10,7 +9,6 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,64 +26,35 @@ public class Bubbla {
 
 	/**
 	 * Reads a list of articles from the specified RSS feed.
-	 * The articles are returned through the supplied BubblaListener upon completion.
 	 *
-	 * @param feed     The feed to read.
-	 * @param listener The BubblaListener containing the callback methods.
+	 * @param feed The feed to read.
+	 * @return A list of BubblaArticles, or null if fetching failed.
 	 */
-	public static void read(BubblaFeed feed, BubblaListener listener) {
-		if (feed == null || listener == null) {
-			throw new IllegalArgumentException("Arguments must not be null.");
+	public static List<BubblaArticle> read(BubblaFeed feed) {
+		if (feed == null) {
+			throw new IllegalArgumentException("Feed must not be null.");
 		}
-		new AsyncReader().execute(feed, listener);
-	}
 
-	/**
-	 * Performs the reading as an AsyncTask.
-	 */
-	private static class AsyncReader extends AsyncTask<Object, Void, List<BubblaArticle>> {
-		private BubblaListener listener;
+		try {
+			BubblaRSS rss = null;
 
-		@Override
-		protected List<BubblaArticle> doInBackground(Object... params) {
-			BubblaFeed feed = (BubblaFeed) params[0];
-			listener = (BubblaListener) params[1];
+			URL url = new URL(feed.getURL());
+			URLConnection urlConnection = url.openConnection();
+			InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
 
 			try {
-				BubblaRSS rss = null;
-
-				URL url = new URL(feed.getURL());
-				URLConnection urlConnection = url.openConnection();
-				InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
-
-				try {
-					Serializer serializer = new Persister();
-					rss = serializer.read(BubblaRSS.class, inputStream);
-				} finally {
-					inputStream.close();
-				}
-
-				return rss.getChannel().getArticles();
-
-			} catch (Exception e) {
-				if (e.getMessage() != null) {
-					Log.e(TAG, e.getMessage() + " (" + feed.name() + ")");
-				} else {
-					Log.e(TAG, e.toString());
-				}
+				Serializer serializer = new Persister();
+				rss = serializer.read(BubblaRSS.class, inputStream);
+			}
+			finally {
+				inputStream.close();
 			}
 
-			return null;
+			return rss.getChannel().getArticles();
 		}
-
-		@Override
-		protected void onPostExecute(List<BubblaArticle> result) {
-			super.onPostExecute(result);
-			if (result != null) {
-				listener.onSuccess(Collections.unmodifiableList(result));
-			} else {
-				listener.onError();
-			}
+		catch (Exception e) {
+			Log.e(TAG, e.toString() + " (" + feed.name() + ")");
+			return null;
 		}
 	}
 
