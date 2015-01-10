@@ -45,6 +45,7 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Preferences.init(this);
+		BubbligDB.init(this);
 		setContentView(R.layout.activity_main);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -102,6 +103,12 @@ public class MainActivity extends Activity
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_CATEGORY, mCategory);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		BubbligDB.getInstance().cleanupArticles();
 	}
 
 	@Override

@@ -1,11 +1,10 @@
 package se.rgson.da401a.bubblig.model;
 
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 
 import java.io.Serializable;
 
+import se.rgson.da401a.bubblig.BubbligDB;
 import se.rgson.da401a.bubblig.model.readability.Readability;
 import se.rgson.da401a.bubblig.model.readability.ReadabilityResponse;
 
@@ -62,12 +61,19 @@ public class Article implements Comparable<Article>, Serializable {
 			return mContent;
 		}
 		else {
-			ReadabilityResponse response = Readability.parse(getURL());
-			if (response != null) {
-				mContent = "<h1>" + response.getTitle() + "</h1>" + response.getContent();
+			String content = BubbligDB.getInstance().loadArticleContent(getID());
+			if (content != null) {
+				mContent = content;
 			}
 			else {
-				Log.e(TAG, "Failed to fetch content for article " + mID);
+				ReadabilityResponse response = Readability.parse(getURL());
+				if (response != null) {
+					mContent = "<h1>" + response.getTitle() + "</h1>" + response.getContent();
+					BubbligDB.getInstance().saveArticleContent(this);
+				}
+				else {
+					Log.e(TAG, "Failed to fetch content for article " + mID);
+				}
 			}
 			return mContent;
 		}
