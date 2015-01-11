@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -108,7 +109,7 @@ public class MainActivity extends Activity
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		BubbligDB.getInstance().cleanupArticles();
+		BubbligDB.getInstance().cleanup();
 	}
 
 	@Override
@@ -178,13 +179,12 @@ public class MainActivity extends Activity
 				.replace(articlePagerContainerID, ArticlePagerFragment.newInstance(mCategory, article), FRAGMENT_ARTICLE_PAGER)
 				.addToBackStack(null)
 				.commit();
+		ArticleHistory.add(article);
 	}
 
 	@Override
 	public void onDisplayedArticleChanged(Article article) {
-		if (mTabletLayout) {
-			//TODO Update ListView to match displayed article.
-		}
+		ArticleHistory.add(article);
 	}
 
 	private void showAbout() {

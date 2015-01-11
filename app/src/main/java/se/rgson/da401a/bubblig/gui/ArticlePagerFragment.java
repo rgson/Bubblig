@@ -63,7 +63,6 @@ public class ArticlePagerFragment extends Fragment {
 		View root = inflater.inflate(R.layout.fragment_article_pager, container, false);
 
 		mViewPager = (ViewPager) root.findViewById(R.id.article_view_pager);
-		//mViewPager.setOffscreenPageLimit(2);
 
 		if (savedInstanceState != null) {
 			mAdapter = new ArticleFragmentStatePagerAdapter(getFragmentManager(), new ArrayList<Article>());

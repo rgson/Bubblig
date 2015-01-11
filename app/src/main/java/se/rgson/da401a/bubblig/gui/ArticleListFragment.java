@@ -3,7 +3,6 @@ package se.rgson.da401a.bubblig.gui;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import se.rgson.da401a.bubblig.ArticleHistory;
 import se.rgson.da401a.bubblig.Preferences;
 import se.rgson.da401a.bubblig.R;
 import se.rgson.da401a.bubblig.gui.components.ArticleListAdapter;
@@ -27,7 +27,7 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	private ListView mArticleList;
 	private Category mCategory;
 	private Preferences.PreferenceListener mPreferenceListener;
-    private Article mArticle;
+	private ArticleHistory.ArticleHistoryListener mArticleHistoryListener;
 
 	public static ArticleListFragment newInstance(Category category) {
 		ArticleListFragment fragment = new ArticleListFragment();
@@ -40,6 +40,7 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		if (savedInstanceState != null) {
 			mCategory = (Category) savedInstanceState.getSerializable(BUNDLE_CATEGORY);
 		}
@@ -49,15 +50,26 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 		else {
 			throw new IllegalArgumentException("A category must be provided.");
 		}
+
 		mPreferenceListener = new Preferences.PreferenceListener() {
 			@Override
 			public void onTextSizePreferenceChanged(float textSize) {
 				if (mArticleList != null) {
-					((ArticleListAdapter)mArticleList.getAdapter()).notifyDataSetChanged();
+					((ArticleListAdapter) mArticleList.getAdapter()).notifyDataSetChanged();
 				}
 			}
 		};
 		Preferences.attachPreferenceListener(mPreferenceListener);
+
+		mArticleHistoryListener = new ArticleHistory.ArticleHistoryListener() {
+			@Override
+			public void hasReadArticle(Article article) {
+				if (mArticleList != null) {
+					((ArticleListAdapter) mArticleList.getAdapter()).notifyDataSetChanged();
+				}
+			}
+		};
+		ArticleHistory.attachArticleHistoryListener(mArticleHistoryListener);
 	}
 
 	@Override
@@ -83,14 +95,6 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 				view.setSelected(true);
 				if (mListener != null) {
 					mListener.onArticleSelected(adapter.getItem(position));
-
-                    //For coloring visited articles (rows) in ListView
-                       mArticle = adapter.getItem(position);
-                       Integer articleid = mArticle.getID();
-
-                    if (!adapter.IsArticleVisited(articleid)) {
-                        adapter.AddVisitedArticle(articleid);
-                    }
 				}
 			}
 		});
@@ -108,6 +112,7 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	public void onDestroy() {
 		super.onDestroy();
 		Preferences.detachPreferenceListener(mPreferenceListener);
+		ArticleHistory.detachArticleHistoryListener(mArticleHistoryListener);
 	}
 
 	@Override
