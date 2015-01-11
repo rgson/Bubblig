@@ -57,10 +57,7 @@ public class Article implements Comparable<Article>, Serializable {
 	 * @return The content of the article in HTML, or null if fetching failed.
 	 */
 	public String getContent() {
-		if (mContent != null) {
-			return mContent;
-		}
-		else {
+		if (mContent == null) {
 			String content = BubbligDB.getInstance().loadArticleContent(getID());
 			if (content != null) {
 				mContent = content;
@@ -75,7 +72,7 @@ public class Article implements Comparable<Article>, Serializable {
 					Log.e(TAG, "Failed to fetch content for article " + mID);
 				}
 			}
-			return mContent;
 		}
+		return mContent;
 	}
 }

@@ -56,10 +56,7 @@ public enum Category {
 	 * @return An unmodifiable list of articles.
 	 */
 	public List<Article> getArticles() {
-		if (mArticles != null) {
-			return mArticles;
-		}
-		else {
+		if (mArticles == null) {
 			List<BubblaArticle> bubblaArticles = Bubbla.read(BubblaFeed.valueOf(this.name()));
 			if (bubblaArticles != null) {
 				mArticles = new ArrayList<>(bubblaArticles.size());
@@ -71,8 +68,8 @@ public enum Category {
 			else {
 				Log.e(TAG, "Failed to fetch articles for " + name());
 			}
-			return mArticles;
 		}
+		return mArticles;
 	}
 
 	/**
