@@ -79,8 +79,10 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 		@Override
 		protected void onPostExecute(List<Article> articles) {
 			super.onPostExecute(articles);
-			ArticleListAdapter.this.clear();
-			ArticleListAdapter.this.addAll(articles);
+			if (articles != null) {
+				ArticleListAdapter.this.clear();
+				ArticleListAdapter.this.addAll(articles);
+			}
 			if (mListener != null) {
 				mListener.isRefreshing(false);
 			}
