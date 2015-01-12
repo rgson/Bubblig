@@ -3,8 +3,8 @@ package se.rgson.da401a.bubblig.gui;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +27,7 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	private ListView mArticleList;
 	private Category mCategory;
 	private Preferences.PreferenceListener mPreferenceListener;
+    private Article mArticle;
 
 	public static ArticleListFragment newInstance(Category category) {
 		ArticleListFragment fragment = new ArticleListFragment();
@@ -60,8 +61,8 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
-		View root = inflater.inflate(R.layout.fragment_article_list, container, false);
+	public View onCreateView(LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+		final View root = inflater.inflate(R.layout.fragment_article_list, container, false);
 
 		mArticleList = (ListView) root.findViewById(R.id.article_list);
 		mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.article_swipe_refresh_layout);
@@ -82,6 +83,14 @@ public class ArticleListFragment extends Fragment implements ArticleListAdapter.
 				view.setSelected(true);
 				if (mListener != null) {
 					mListener.onArticleSelected(adapter.getItem(position));
+
+                    //For coloring visited articles (rows) in ListView
+                       mArticle = adapter.getItem(position);
+                       Integer articleid = mArticle.getID();
+
+                    if (!adapter.IsArticleVisited(articleid)) {
+                        adapter.AddVisitedArticle(articleid);
+                    }
 				}
 			}
 		});

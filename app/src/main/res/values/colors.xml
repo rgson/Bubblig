@@ -22,6 +22,8 @@
 	<color name="row_click_item">#D8D8D8</color>
 	<color name="row_lst_item_odd">#f7f7f7FF</color>
 	<color name="row_lst_item_even">#FFFFFFFF</color>
+    <color name="row_lst_item_clicked">#700000</color>
+    <color name="row_standard_text_color">#000000</color>
 
 	<!-- The webbsite for the color tint is: "http://www.color-hex.com/".-->
 	<color name="row_category_nyheter">#e8f1ee</color>
